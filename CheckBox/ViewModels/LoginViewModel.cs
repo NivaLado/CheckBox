@@ -25,6 +25,11 @@ namespace CheckBox.ViewModels
 			ApiCommand = new Command(OnApiClicked);
 		}
 
+		private void OnApiClicked(object obj)
+        {
+
+        }
+
 		private void OnLoginClicked(object obj)
 		{
 			string clientId = null;
