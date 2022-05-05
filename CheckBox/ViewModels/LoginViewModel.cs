@@ -16,10 +16,13 @@ namespace CheckBox.ViewModels
 	public class LoginViewModel : BaseViewModel
 	{
 		public Command LoginCommand { get; }
+		
+		public Command ApiCommand { get; }
 
 		public LoginViewModel()
 		{
 			LoginCommand = new Command(OnLoginClicked);
+			ApiCommand = new Command(OnApiClicked);
 		}
 
 		private void OnLoginClicked(object obj)
