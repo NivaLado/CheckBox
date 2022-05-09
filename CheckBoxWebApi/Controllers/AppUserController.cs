@@ -32,6 +32,7 @@ namespace CheckBoxWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUserAsync(AppUser user)
         {
+            // TODO: Id should auto increment
             await _context.AppUsers.AddAsync(user);
             await _context.SaveChangesAsync();
 
