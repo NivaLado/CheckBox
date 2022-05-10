@@ -12,21 +12,38 @@ namespace CheckBox.ViewModels
     public class LoginViewModel : BaseViewModel
 	{
 		public Command LoginCommand { get; }
-		
+
+		public Command GoogleCommand { get; }
+
+		public Command RegisterCommand { get; }
+
 		public Command ApiCommand { get; }
 
 		public LoginViewModel()
 		{
 			LoginCommand = new Command(OnLoginClicked);
 			ApiCommand = new Command(OnApiClicked);
+			GoogleCommand = new Command(OnGoogleClicked);
+			RegisterCommand = new Command(OnRegisterClicked);
 		}
 
-		private void OnApiClicked(object obj)
+		private void OnRegisterClicked()
         {
 
         }
 
-		private void OnLoginClicked(object obj)
+		private void OnApiClicked()
+        {
+
+        }
+
+		private async void OnLoginClicked()
+        {
+			await Xamarin.Essentials.SecureStorage.SetAsync(nameof(AppConstants.UserId), "Test");
+			await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
+        }
+
+		private void OnGoogleClicked()
 		{
 			string clientId = null;
 			string redirectUri = null;

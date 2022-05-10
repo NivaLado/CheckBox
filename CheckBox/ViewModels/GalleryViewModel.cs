@@ -1,4 +1,5 @@
-﻿using CheckBox.Models;
+﻿using CheckBox.Constants;
+using CheckBox.Models;
 using CheckBox.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -18,12 +19,22 @@ namespace CheckBox.ViewModels
 
         public Command AddCommand { get; }
 
+        // TODO: Chenge logout place
+        public Command LogoutCommand { get; }
+
         public GalleryViewModel()
         {
             Title = "Gallery";
             Items = new ObservableCollection<GalleryItem>();
             LoadItemsCommand = new Command(ExecuteLoadItemsCommand);
             AddCommand = new Command(ExecuteAddCommand);
+            LogoutCommand = new Command(ExecuteLogoutCommand);
+        }
+
+        private async void ExecuteLogoutCommand()
+        {
+            Xamarin.Essentials.SecureStorage.Remove(nameof(AppConstants.UserId));
+            await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
 
         private async void ExecuteAddCommand()

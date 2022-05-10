@@ -29,9 +29,10 @@
         </ResourceDictionary>
     </Shell.Resources>
 
+    <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}"/>
+
     <TabBar>
-        <ShellContent Title="Gallery" ContentTemplate="{DataTemplate local:GalleryPage}}"/>
-        <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
+        <ShellContent Title="Gallery" Route="GalleryPage" ContentTemplate="{DataTemplate local:GalleryPage}"/>
         <ShellContent Title="About" Icon="icon_about.png" Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
         <ShellContent Title="Browse" Icon="icon_feed.png" ContentTemplate="{DataTemplate local:ItemsPage}" />
     </TabBar>

@@ -3,6 +3,7 @@
 	public class AppConstants
 	{
 		public static string AppName = "CheckBoxDevelopment";
+		public static string UserId;
 
 		// OAuth
 		// For Google login, configure at https://console.developers.google.com/
