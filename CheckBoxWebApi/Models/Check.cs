@@ -13,5 +13,7 @@ namespace CheckBoxWebApi.Models
         public DateTime CreationTime { get; set; }
 
         public DateTime EditTime { get; set; }
+
+        public string Url { get; set; }
     }
 }

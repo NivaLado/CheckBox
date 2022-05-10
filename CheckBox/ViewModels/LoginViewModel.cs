@@ -1,19 +1,15 @@
 ﻿using CheckBox.Views;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Xamarin.Auth;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 using CheckBox.Models;
 using CheckBox.Constants;
 
 namespace CheckBox.ViewModels
 {
-	public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel
 	{
 		public Command LoginCommand { get; }
 		

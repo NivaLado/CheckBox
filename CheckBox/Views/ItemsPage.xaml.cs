@@ -1,14 +1,5 @@
-﻿using CheckBox.Models;
-using CheckBox.ViewModels;
-using CheckBox.Views;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CheckBox.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace CheckBox.Views
 {

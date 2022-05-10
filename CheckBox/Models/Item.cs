@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CheckBox.Models
+﻿namespace CheckBox.Models
 {
     public class Item
     {

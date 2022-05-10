@@ -1,8 +1,5 @@
 ﻿using CheckBox.Services;
-using CheckBox.Views;
-using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace CheckBox
 {

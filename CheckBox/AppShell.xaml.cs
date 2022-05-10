@@ -1,7 +1,4 @@
-﻿using CheckBox.ViewModels;
-using CheckBox.Views;
-using System;
-using System.Collections.Generic;
+﻿using CheckBox.Views;
 using Xamarin.Forms;
 
 namespace CheckBox
@@ -12,6 +9,8 @@ namespace CheckBox
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
+            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
         }
 

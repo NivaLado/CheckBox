@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CheckBox.Models
+﻿namespace CheckBox.Models
 {
     public class GalleryItem
     {

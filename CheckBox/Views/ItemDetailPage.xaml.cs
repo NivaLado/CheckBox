@@ -1,5 +1,4 @@
 ﻿using CheckBox.ViewModels;
-using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace CheckBox.Views
