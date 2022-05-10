@@ -1,4 +1,4 @@
-﻿
+﻿using CheckBox.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,6 +10,7 @@ namespace CheckBox.Views
         public NewAlbumPage()
         {
             InitializeComponent();
+            BindingContext = new NewAlbumViewModel();
         }
     }
 }

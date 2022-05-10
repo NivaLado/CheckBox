@@ -4,12 +4,12 @@ using Xamarin.Forms;
 
 namespace CheckBox.ViewModels
 {
-    public class NewItemViewModel : BaseViewModel
+    public class NewAlbumViewModel : BaseViewModel
     {
-        private string text;
+        private string name;
         private string description;
 
-        public NewItemViewModel()
+        public NewAlbumViewModel()
         {
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
@@ -19,14 +19,14 @@ namespace CheckBox.ViewModels
 
         private bool ValidateSave()
         {
-            return !string.IsNullOrWhiteSpace(text)
+            return !string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(description);
         }
 
-        public string Text
+        public string Name
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get => name;
+            set => SetProperty(ref name, value);
         }
 
         public string Description
@@ -45,15 +45,17 @@ namespace CheckBox.ViewModels
 
         private async void OnSave()
         {
-            Item newItem = new Item()
+            Album newAlbum = new Album()
             {
                 Id = Guid.NewGuid().ToString(),
-                Text = Text,
+                Name = Name,
                 Description = Description
             };
 
-            await DataStore.AddItemAsync(newItem);
+            // Gather Id from result
+            // await DataStore.AddItemAsync(newItem);
 
+            // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
         }
     }

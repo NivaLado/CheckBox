@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace CheckBox
 {
-    public partial class AppShell : Xamarin.Forms.Shell
+    public partial class AppShell : Shell
     {
         public AppShell()
         {
@@ -11,7 +11,7 @@ namespace CheckBox
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
 
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
+            Routing.RegisterRoute(nameof(NewAlbumPage), typeof(NewAlbumPage));
         }
 
     }

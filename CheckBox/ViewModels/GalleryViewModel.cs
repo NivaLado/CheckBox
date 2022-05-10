@@ -16,14 +16,22 @@ namespace CheckBox.ViewModels
 
         public Command LoadItemsCommand { get; }
 
+        public Command AddCommand { get; }
+
         public GalleryViewModel()
         {
             Title = "Gallery";
             Items = new ObservableCollection<GalleryItem>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            LoadItemsCommand = new Command(ExecuteLoadItemsCommand);
+            AddCommand = new Command(ExecuteAddCommand);
         }
 
-        async Task ExecuteLoadItemsCommand()
+        private async void ExecuteAddCommand()
+        {
+            await Shell.Current.GoToAsync(nameof(NewAlbumPage));
+        }
+
+        private void ExecuteLoadItemsCommand()
         {
             IsBusy = true;
 

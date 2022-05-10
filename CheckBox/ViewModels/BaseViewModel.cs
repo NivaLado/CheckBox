@@ -12,6 +12,8 @@ namespace CheckBox.ViewModels
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
 
+        public ICheckBoxService CheckBoxService => DependencyService.Get<ICheckBoxService>();
+
         bool isBusy = false;
         public bool IsBusy
         {
