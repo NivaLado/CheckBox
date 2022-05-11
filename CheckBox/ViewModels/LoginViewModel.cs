@@ -11,9 +11,17 @@ namespace CheckBox.ViewModels
 {
     public class LoginViewModel : BaseViewModel
 	{
+        public string Email { get; set; }
+
+		public string Password { get; set; }
+
+		public string RepeatPassword { get; set; }
+
 		public Command LoginCommand { get; }
 
 		public Command GoogleCommand { get; }
+
+		public Command FacebookCommand { get; }
 
 		public Command RegisterCommand { get; }
 
@@ -21,7 +29,7 @@ namespace CheckBox.ViewModels
 
 		public LoginViewModel()
 		{
-			LoginCommand = new Command(OnLoginClicked);
+			LoginCommand = new Command(OnLoginClicked, CanLogin);
 			ApiCommand = new Command(OnApiClicked);
 			GoogleCommand = new Command(OnGoogleClicked);
 			RegisterCommand = new Command(OnRegisterClicked);
@@ -41,6 +49,14 @@ namespace CheckBox.ViewModels
         {
 			await Xamarin.Essentials.SecureStorage.SetAsync(nameof(AppConstants.UserId), "Test");
 			await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
+        }
+
+		private bool CanLogin()
+        {
+			if (Email == null || Password == null || RepeatPassword == null || (Password != RepeatPassword))
+				return false;
+			else
+				return true;
         }
 
 		private void OnGoogleClicked()
