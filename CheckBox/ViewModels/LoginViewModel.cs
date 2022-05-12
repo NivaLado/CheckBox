@@ -6,6 +6,7 @@ using Xamarin.Auth;
 using Xamarin.Forms;
 using CheckBox.Models;
 using CheckBox.Constants;
+using Google.Apis.Auth;
 
 namespace CheckBox.ViewModels
 {
@@ -59,7 +60,7 @@ namespace CheckBox.ViewModels
 				return true;
         }
 
-		private void OnGoogleClicked()
+		private async void OnGoogleClicked()
 		{
 			string clientId = null;
 			string redirectUri = null;
@@ -98,7 +99,7 @@ namespace CheckBox.ViewModels
 
 		async void OnAuthCompleted(object sender, AuthenticatorCompletedEventArgs e)
 		{
-			if (sender is OAuth2Authenticator authenticator)
+			if (sender is OAuth2Authenticator authenticator) 
 			{
 				authenticator.Completed -= OnAuthCompleted;
 				authenticator.Error -= OnAuthError;
@@ -107,6 +108,8 @@ namespace CheckBox.ViewModels
 			User user = null;
 			if (e.IsAuthenticated)
 			{
+				await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
+
 				// If the user is authenticated, request their basic user data from Google
 				// UserInfoUrl = https://www.googleapis.com/oauth2/v2/userinfo
 				var request = new OAuth2Request("GET", new Uri(AppConstants.UserInfoUrl), null, e.Account);
@@ -119,9 +122,15 @@ namespace CheckBox.ViewModels
 					user = JsonConvert.DeserializeObject<User>(userJson);
 				}
 
+				// Validate JWT
+				//var idToken = e.Account.Properties["id_token"];
+				//var refreshToken = e.Account.Properties["refresh_token"];
+				//var experisIn = e.Account.Properties["expires_in"];
+				//var validPayload = await GoogleJsonWebSignature.ValidateAsync(idToken);
+
 				if (user != null)
 				{
-					await Shell.Current.GoToAsync(nameof(NewItemPage));
+					// await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
 				}
 
 				//await store.SaveAsync(account = e.Account, AppConstant.Constants.AppName);

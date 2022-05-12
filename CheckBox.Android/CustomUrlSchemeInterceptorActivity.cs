@@ -25,6 +25,10 @@ namespace CheckBox.Droid
 			// Load redirectUrl page
 			AuthenticationState.Authenticator.OnPageLoading(uri);
 
+			// Close custom tab
+			var intent = new Intent(this, typeof(MainActivity));
+			intent.SetFlags(ActivityFlags.ClearTop | ActivityFlags.SingleTop);
+			StartActivity(intent);
 			Finish();
 		}
 	}

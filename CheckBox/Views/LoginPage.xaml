@@ -17,7 +17,7 @@
     <ContentPage.Content>
         <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
             <Label Text="Email:"/>
-            <Entry Text="{Binding Email, Mode=TwoWay}" Placeholder="Email" PropertyChanged="Entry_PropertyChanged">
+            <Entry Text="{Binding Email, Mode=TwoWay}" Placeholder="Email">
                 <Entry.Behaviors>
                     <xct:EmailValidationBehavior
                         x:Name="EmailValidator"
