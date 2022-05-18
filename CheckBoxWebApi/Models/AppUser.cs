@@ -4,14 +4,18 @@ namespace CheckBoxWebApi.Models
 {
     public class AppUser
     {
+        [Key]
         public long Id { get; set; }
 
-        [Key]
         [MaxLength(256)]
-        public string UserId { get; set; }
+        public string AuthorizationMethod { get; set; }
 
         [MaxLength(256)]
+        [Required]
         public string Email { get; set; }
+
+        [MaxLength(256)]
+        public string Password { get; set; }
 
         [MaxLength(256)]
         public string Name { get; set; }

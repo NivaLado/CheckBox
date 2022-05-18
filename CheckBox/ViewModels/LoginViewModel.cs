@@ -60,7 +60,7 @@ namespace CheckBox.ViewModels
 				return true;
         }
 
-		private async void OnGoogleClicked()
+		private void OnGoogleClicked()
 		{
 			string clientId = null;
 			string redirectUri = null;

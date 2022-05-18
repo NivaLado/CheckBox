@@ -1,5 +1,6 @@
 ﻿using CheckBox.Models;
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -12,6 +13,10 @@ namespace CheckBox.ViewModels
         private string name;
         private string description;
 
+        public ObservableCollection<string> ChecksFileLocation { get; }
+
+        public string Test { get; set; }
+
         public NewAlbumViewModel()
         {
             SaveCommand = new Command(OnSave, ValidateSave);
@@ -19,6 +24,9 @@ namespace CheckBox.ViewModels
             PhotoCommand = new Command(async () => await TakePhotoAsync());
             PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
+
+            ChecksFileLocation = new ObservableCollection<string>();
+            ChecksFileLocation.Add("/data/user/0/com.companyname.checkbox/cache/822b028f37bc4ce7b9432897f156004b.jpg");
         }
 
         public string PhotoPath { get; set; }
@@ -42,6 +50,7 @@ namespace CheckBox.ViewModels
         }
 
         public Command SaveCommand { get; }
+
         public Command CancelCommand { get; }
 
         public Command PhotoCommand { get; }
@@ -52,15 +61,16 @@ namespace CheckBox.ViewModels
             {
                 var photo = await MediaPicker.CapturePhotoAsync();
                 await LoadPhotoAsync(photo);
+                ChecksFileLocation.Add(PhotoPath);
                 Console.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
             }
             catch (FeatureNotSupportedException fnsEx)
             {
-                // Feature is not supported on the device
+                Console.WriteLine($"CapturePhotoAsync THREW: {fnsEx.Message}");
             }
             catch (PermissionException pEx)
             {
-                // Permissions not granted
+                Console.WriteLine($"CapturePhotoAsync THREW: {pEx.Message}");
             }
             catch (Exception ex)
             {

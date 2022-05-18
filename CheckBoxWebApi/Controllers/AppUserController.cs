@@ -19,23 +19,37 @@ namespace CheckBoxWebApi.Controllers
             return await _context.AppUsers.ToListAsync();
         }
 
-        [HttpGet("userId")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(AppUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByUserId(string userId)
+        public async Task<IActionResult> GetByUserId(long id)
         {
-            var user = await _context.AppUsers.FindAsync(userId);
+            var user = await _context.AppUsers.FindAsync(id);
             return user == null ? NotFound() : Ok(user);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUserAsync(AppUser user)
+        [HttpGet("email/{email}")]
+        public async Task<bool> GetByUserEmail(string email)
         {
-            // TODO: Id should auto increment
+            var user = await _context.AppUsers.SingleOrDefaultAsync(user => user.Email == email);
+            return user != null;
+        }
+
+        [HttpPost]
+
+        public async Task<IActionResult> CreateUserIfEmailIsFreeAsync(AppUser user)
+        {
+            var userWithThatEmailExist = await GetByUserEmail(user.Email);
+
+            if (userWithThatEmailExist)
+            {
+                return BadRequest("User already exist");
+            }
+
             await _context.AppUsers.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetByUserId), new { userId = user.UserId }, user);
+            return CreatedAtAction(nameof(GetByUserId), new { userId = user.Id }, user);
         }
     }
 }

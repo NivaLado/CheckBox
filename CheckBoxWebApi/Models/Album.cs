@@ -3,15 +3,11 @@
 namespace CheckBoxWebApi.Models
 {
     public class Album
-    {
+    { 
+        [Key]
         public long Id { get; set; }
 
-        [MaxLength(256)]
-        public string UserId { get; set; }
-
-        [Key]
-        [MaxLength(256)]
-        public string AlbumId { get; set; }
+        public long UserId { get; set; }
 
         [Required]
         [MaxLength(256)]
@@ -19,6 +15,12 @@ namespace CheckBoxWebApi.Models
 
         [MaxLength(256)]
         public string Description { get; set; }
+
+        [Required]
+        public string ThumbnailUrl { get; set; }
+
+        [Required]
+        public string FolderName { get; set; }
 
         public DateTime CreationTime { get; set; }
 

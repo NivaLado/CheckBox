@@ -14,7 +14,7 @@ namespace CheckBox.Droid
 {
 	
 	
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "12.2.4.160")]
+	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Xamarin.Android.Build.Tasks", "12.3.0.26")]
 	public partial class Resource
 	{
 		
@@ -175,7 +175,6 @@ namespace CheckBox.Droid
 			global::Xamarin.Auth.Resource.Styleable.GradientColorItem = global::CheckBox.Droid.Resource.Styleable.GradientColorItem;
 			global::Xamarin.Auth.Resource.Styleable.GradientColorItem_android_color = global::CheckBox.Droid.Resource.Styleable.GradientColorItem_android_color;
 			global::Xamarin.Auth.Resource.Styleable.GradientColorItem_android_offset = global::CheckBox.Droid.Resource.Styleable.GradientColorItem_android_offset;
-			global::Xamarin.Auth.CustomTabsConfiguration.CustomTabsClosingMessage = null;
 			global::Xamarin.CommunityToolkit.Resource.Animation.abc_fade_in = global::CheckBox.Droid.Resource.Animation.abc_fade_in;
 			global::Xamarin.CommunityToolkit.Resource.Animation.abc_fade_out = global::CheckBox.Droid.Resource.Animation.abc_fade_out;
 			global::Xamarin.CommunityToolkit.Resource.Animation.abc_grow_fade_in_from_bottom = global::CheckBox.Droid.Resource.Animation.abc_grow_fade_in_from_bottom;

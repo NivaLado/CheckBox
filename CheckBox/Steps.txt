@@ -1,0 +1,6 @@
+﻿http://10.0.2.2:52236/api/AppUser
+
+// Install SSEI 2019
+// Install SSMS 18
+// Add-Migration createdatabase -o Data/Migrations 
+// Update-Database
