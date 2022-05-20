@@ -12,6 +12,7 @@ namespace CheckBox
 
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<CheckBoxService>();
+            DependencyService.Register<LocalStorageService>();
             MainPage = new AppShell();
         }
 

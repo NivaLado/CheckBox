@@ -13,9 +13,9 @@ namespace CheckBoxWebApi.Data.Migrations
                 name: "Albums",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -32,15 +32,17 @@ namespace CheckBoxWebApi.Data.Migrations
                 name: "AppUsers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AuthorizationMethod = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    VendorId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    AuthorizationMethod = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: true),
                     AccountCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,9 +53,9 @@ namespace CheckBoxWebApi.Data.Migrations
                 name: "Checks",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AlbumId = table.Column<long>(type: "bigint", nullable: false),
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EditTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)

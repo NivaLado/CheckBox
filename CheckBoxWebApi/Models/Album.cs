@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CheckBoxWebApi.Models
 {
     public class Album
     { 
         [Key]
-        public long Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-        public long UserId { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         [MaxLength(256)]

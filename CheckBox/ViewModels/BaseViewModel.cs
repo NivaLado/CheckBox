@@ -14,6 +14,8 @@ namespace CheckBox.ViewModels
 
         public ICheckBoxService CheckBoxService => DependencyService.Get<ICheckBoxService>();
 
+        public ILocalStorageService LocalStorageService => DependencyService.Get<ILocalStorageService>();
+
         bool isBusy = false;
         public bool IsBusy
         {

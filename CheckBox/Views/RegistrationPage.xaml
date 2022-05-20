@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              mc:Ignorable="d"
-             x:Class="CheckBox.Views.LoginPage"
+             x:Class="CheckBox.Views.RegistrationPage"
              Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
@@ -22,9 +22,10 @@
                     <xct:EmailValidationBehavior
                         x:Name="EmailValidator"
                         IsValid="False"
-                        MinimumLength="6"
                         DecorationFlags="Trim"
-                        Flags="ValidateOnAttaching,ValidateOnValueChanging,ValidateOnFocusing"
+                        MinimumLength="6"
+                        MaximumLength="24"
+                        Flags="ValidateOnFocusing,ValidateOnValueChanging"
                         InvalidStyle="{StaticResource InvalidEntryStyle}"
                     />
                 </Entry.Behaviors>
@@ -36,7 +37,7 @@
                     <xct:MultiValidationBehavior
                              x:Name="PasswordValidator"
                              IsValid="False"
-                             Flags="ValidateOnAttaching,ValidateOnValueChanging,ValidateOnFocusing"
+                             Flags="ValidateOnFocusing,ValidateOnValueChanging"
                              InvalidStyle="{StaticResource InvalidEntryStyle}">
                         <xct:TextValidationBehavior
                              MinimumLength="6" />
@@ -61,24 +62,32 @@
                 </Entry.Behaviors>
             </Entry>
 
-            <Button Text="Login" IsEnabled="False" Command="{Binding LoginCommand}">
+            <Label Text="Repeat Password:"/>
+            <Entry Text="{Binding RepeatPassword}" IsPassword="True" Placeholder="Repeat Password">
+                <Entry.Behaviors>
+                    <xct:RequiredStringValidationBehavior
+                        x:Name="PasswordsMatchValidator"
+                        IsValid="False"
+                        Flags="ValidateOnFocusing,ValidateOnValueChanging"
+                        InvalidStyle="{StaticResource InvalidEntryStyle}"
+                        RequiredString="{Binding Text, Source={x:Reference PasswordEntry}}" />
+                </Entry.Behaviors>
+            </Entry>
+
+            <Button Text="Register" IsEnabled="True" Command="{Binding RegisterCommand}">
                 <Button.Triggers>
                     <MultiTrigger TargetType="Button">
                         <MultiTrigger.Conditions>
                             <BindingCondition Binding="{Binding IsValid, Source={x:Reference EmailValidator}}" Value="True"/>
                             <BindingCondition Binding="{Binding IsValid, Source={x:Reference PasswordValidator}}" Value="True"/>
+                            <BindingCondition Binding="{Binding IsValid, Source={x:Reference PasswordsMatchValidator}}" Value="True"/>
                         </MultiTrigger.Conditions>
                         <Setter Property="IsEnabled" Value="True" />
                     </MultiTrigger>
                 </Button.Triggers>
             </Button>
+            <Button Text="Cancel" Command="{Binding CancelCommand}"/>
 
-
-            <Button Text="Register" Command="{Binding RegisterCommand}"/>
-
-            <Button Text="Google Login" Command="{Binding GoogleCommand}"/>
-
-            <Label Text="User with provided Email already exist in the system =(" IsVisible="{Binding ShowUserNotExistNotification}" TextColor="Red" FontSize="Body"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

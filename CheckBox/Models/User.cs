@@ -31,17 +31,5 @@ namespace CheckBox.Models
 
 		[JsonProperty("gender")]
 		public string Gender { get; set; }
-
-		[JsonProperty("open_id")]
-        public string OpenId { get; set; }
-
-		[JsonProperty("id_token")]
-		public string IdToken { get; set; }
-
-		[JsonProperty("access_token")]
-		public string AccessToken { get; set; }
-
-		[JsonProperty("code")]
-		public string Code { get; set; }
     }
 }

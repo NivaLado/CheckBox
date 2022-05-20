@@ -19,7 +19,7 @@ namespace CheckBox.ViewModels
 
         public Command AddCommand { get; }
 
-        // TODO: Chenge logout place
+        // TODO: Change logout place
         public Command LogoutCommand { get; }
 
         public GalleryViewModel()
@@ -33,7 +33,7 @@ namespace CheckBox.ViewModels
 
         private async void ExecuteLogoutCommand()
         {
-            Xamarin.Essentials.SecureStorage.Remove(nameof(AppConstants.UserId));
+            LocalStorageService.Logout();
             await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
         }
 

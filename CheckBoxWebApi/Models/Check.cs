@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CheckBoxWebApi.Models
 {
     public class Check
     {
         [Key]
-        public long Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-        public long AlbumId { get; set; }
+        public int AlbumId { get; set; }
 
         public DateTime CreationTime { get; set; }
 

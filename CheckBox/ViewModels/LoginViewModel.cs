@@ -7,16 +7,23 @@ using Xamarin.Forms;
 using CheckBox.Models;
 using CheckBox.Constants;
 using Google.Apis.Auth;
+using CheckBox.Enums;
 
 namespace CheckBox.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+	public class LoginViewModel : BaseViewModel
 	{
+		private bool showUserNotExistNotification;
+
+		public bool ShowUserNotExistNotification
+		{
+			get => showUserNotExistNotification;
+			set => SetProperty(ref showUserNotExistNotification, value);
+		}
+
         public string Email { get; set; }
 
 		public string Password { get; set; }
-
-		public string RepeatPassword { get; set; }
 
 		public Command LoginCommand { get; }
 
@@ -26,35 +33,41 @@ namespace CheckBox.ViewModels
 
 		public Command RegisterCommand { get; }
 
-		public Command ApiCommand { get; }
-
 		public LoginViewModel()
 		{
 			LoginCommand = new Command(OnLoginClicked, CanLogin);
-			ApiCommand = new Command(OnApiClicked);
 			GoogleCommand = new Command(OnGoogleClicked);
 			RegisterCommand = new Command(OnRegisterClicked);
 		}
 
-		private void OnRegisterClicked()
+		public void ShowThatUserExist (bool userExist)
         {
+			ShowUserNotExistNotification = userExist;
+		}
 
-        }
-
-		private void OnApiClicked()
+		private async void OnRegisterClicked()
         {
-
-        }
+			await Shell.Current.GoToAsync($"{nameof(RegistrationPage)}");
+		}
 
 		private async void OnLoginClicked()
         {
-			await Xamarin.Essentials.SecureStorage.SetAsync(nameof(AppConstants.UserId), "Test");
-			await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
+			var id = await CheckBoxService.Login(Email, Password);
+            if (id > 0)
+            {
+				await LocalStorageService.Login(id, (ushort)AuthorizationMethod.Internal);
+				await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
+			}
+			else
+            {
+				// TODO: Probably wrong credentials error message
+				ShowThatUserExist(true);
+			}
         }
 
 		private bool CanLogin()
         {
-			if (Email == null || Password == null || RepeatPassword == null || (Password != RepeatPassword))
+			if (Email == null || Password == null)
 				return false;
 			else
 				return true;
@@ -108,8 +121,6 @@ namespace CheckBox.ViewModels
 			User user = null;
 			if (e.IsAuthenticated)
 			{
-				await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
-
 				// If the user is authenticated, request their basic user data from Google
 				// UserInfoUrl = https://www.googleapis.com/oauth2/v2/userinfo
 				var request = new OAuth2Request("GET", new Uri(AppConstants.UserInfoUrl), null, e.Account);
@@ -130,11 +141,23 @@ namespace CheckBox.ViewModels
 
 				if (user != null)
 				{
-					// await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
-				}
+					int id = await CheckBoxService.RegisterOrGetUserForGoogle(
+						user.Email, 
+						(ushort)AuthorizationMethod.Google,
+						user.Id,
+						user.GivenName,
+						user.FamilyName);
 
-				//await store.SaveAsync(account = e.Account, AppConstant.Constants.AppName);
-				//await DisplayAlert("Email address", user.Email, "OK");
+					if (id > 0)
+                    {
+						await LocalStorageService.Login(id, (ushort)AuthorizationMethod.Google);
+						await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
+                    }
+					else
+                    {
+						ShowThatUserExist(true);
+					}
+				}
 			}
 		}
 
