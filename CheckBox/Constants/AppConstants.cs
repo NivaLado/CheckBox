@@ -2,6 +2,8 @@
 {
 	public class AppConstants
 	{
+		public static string UserDirectory => $"{LoginMethod}_{UserId}";
+
 		public static string AppName = "CheckBoxDevelopment";
 		public static string UserId;
 		public static string LoginMethod;

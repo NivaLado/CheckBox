@@ -1,4 +1,5 @@
-﻿using CheckBox.Models;
+﻿using CheckBox.Constants;
+using CheckBox.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -12,10 +13,9 @@ namespace CheckBox.ViewModels
     {
         private string name;
         private string description;
-
-        public ObservableCollection<string> ChecksFileLocation { get; }
-
-        public string Test { get; set; }
+        private string albumName;
+        private string uniquePhotoName;
+        public ObservableCollection<CheckItem> Checks { get; }
 
         public NewAlbumViewModel()
         {
@@ -25,8 +25,18 @@ namespace CheckBox.ViewModels
             PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
-            ChecksFileLocation = new ObservableCollection<string>();
-            ChecksFileLocation.Add("/data/user/0/com.companyname.checkbox/cache/822b028f37bc4ce7b9432897f156004b.jpg");
+            var tempCheckItem = new CheckItem() { Url = "https://dummyimage.com/100x100/942e94/1aff00.png" };
+
+            Checks = new ObservableCollection<CheckItem>();
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
+            Checks.Add(tempCheckItem);
         }
 
         public string PhotoPath { get; set; }
@@ -61,7 +71,7 @@ namespace CheckBox.ViewModels
             {
                 var photo = await MediaPicker.CapturePhotoAsync();
                 await LoadPhotoAsync(photo);
-                ChecksFileLocation.Add(PhotoPath);
+                Checks.Add(new CheckItem() { Url = PhotoPath });
                 Console.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
             }
             catch (FeatureNotSupportedException fnsEx)
@@ -86,8 +96,12 @@ namespace CheckBox.ViewModels
                 PhotoPath = null;
                 return;
             }
+
             // save the file into local storage
-            var newFile = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+            uniquePhotoName = string.Concat(Guid.NewGuid().ToString().Replace("-", ""), photo.ContentType);
+            albumName = DateTime.UtcNow.ToString();
+
+            var newFile = Path.Combine(FileSystem.CacheDirectory, AppConstants.UserDirectory, albumName, uniquePhotoName);
             using (var stream = await photo.OpenReadAsync())
             using (var newStream = File.OpenWrite(newFile))
                 await stream.CopyToAsync(newStream);

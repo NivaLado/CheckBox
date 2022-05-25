@@ -1,10 +1,8 @@
-﻿using CheckBox.Constants;
-using CheckBox.Models;
+﻿using CheckBox.Models;
 using CheckBox.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace CheckBox.ViewModels

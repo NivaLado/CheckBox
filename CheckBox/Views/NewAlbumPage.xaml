@@ -2,37 +2,66 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CheckBox.Views.NewAlbumPage"
+             xmlns:viewmodels="clr-namespace:CheckBox.ViewModels" 
+             xmlns:model="clr-namespace:CheckBox.Models"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Shell.PresentationMode="ModalAnimated"
              Title="New Album"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
     <ContentPage.Content>
-        <StackLayout Spacing="3" Padding="15">
-            <Label Text="Text" FontSize="Medium" />
-            <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" />
-            <Label Text="Description" FontSize="Medium" />
-            <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
-            <StackLayout Orientation="Horizontal">
-                <Button Text="Take Photo" Command="{Binding PhotoCommand}" HorizontalOptions="FillAndExpand"></Button>
-                <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-                <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
-            </StackLayout>
+        <Grid Padding="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <ListView ItemsSource="{Binding ChecksFileLocation, Mode=TwoWay}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <ViewCell.View>
-                                <StackLayout Orientation="Vertical">
-                                    <Image Source="{Binding}"/>
+            <ScrollView Grid.Row="0">
+                <StackLayout>
+                    <Label Text="Text" FontSize="Medium" />
+                    <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" />
+                    <Label Text="Description" FontSize="Medium" />
+                    <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
+                    <StackLayout Orientation="Horizontal">
+                        <Button Text="Take Photo" Command="{Binding PhotoCommand}" HorizontalOptions="FillAndExpand"></Button>
+                        <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
+                        <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+                    </StackLayout>
+
+                    <FlexLayout x:DataType="viewmodels:NewAlbumViewModel"   
+                            BindableLayout.ItemsSource="{Binding Checks}"
+                            Wrap="Wrap">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="model:CheckItem">
+                                <StackLayout FlexLayout.Basis="50%"
+                                         HeightRequest="250"
+                                         Margin="10">
+                                    <AbsoluteLayout VerticalOptions="FillAndExpand"
+                                                AbsoluteLayout.LayoutBounds="0,1,1,1"
+                                                AbsoluteLayout.LayoutFlags="All">
+                                        <Image Source="{Binding Url}"
+                                           Aspect="AspectFill"
+                                           AbsoluteLayout.LayoutBounds="0,1,1,1"
+                                           AbsoluteLayout.LayoutFlags="All" />
+                                    </AbsoluteLayout>
                                 </StackLayout>
-                            </ViewCell.View>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-
-        </StackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </StackLayout>
+            </ScrollView>
+            
+            <Button Grid.Row="0" 
+                    Text="Add photo" 
+                    BorderColor="#2b3c3c" 
+                    BorderWidth="1" 
+                    FontAttributes="Bold" 
+                    BorderRadius="35" 
+                    TextColor="White" 
+                    WidthRequest="160" 
+                    HeightRequest="70" 
+                    Margin="0,0,20,22" 
+                    HorizontalOptions="End" 
+                    VerticalOptions="End"/>
+        </Grid>
     </ContentPage.Content>
-
 </ContentPage>

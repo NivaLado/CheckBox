@@ -4,3 +4,4 @@
 // Install SSMS 18
 // Add-Migration createdatabase -o Data/Migrations 
 // Update-Database
+// Reindent CTRL+K CTRL+F
