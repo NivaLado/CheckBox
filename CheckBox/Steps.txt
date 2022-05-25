@@ -5,3 +5,4 @@
 // Add-Migration createdatabase -o Data/Migrations 
 // Update-Database
 // Reindent CTRL+K CTRL+F
+// App package name: com.companyname.checkbox

@@ -141,12 +141,12 @@ namespace CheckBox.ViewModels
 
 				if (user != null)
 				{
-					int id = await CheckBoxService.RegisterOrGetUserForGoogle(
-						user.Email, 
-						(ushort)AuthorizationMethod.Google,
-						user.Id,
-						user.GivenName,
-						user.FamilyName);
+					int id = 1; //await CheckBoxService.RegisterOrGetUserForGoogle(
+					//	user.Email, 
+					//	(ushort)AuthorizationMethod.Google,
+					//	user.Id,
+					//	user.GivenName,
+					//	user.FamilyName);
 
 					if (id > 0)
                     {

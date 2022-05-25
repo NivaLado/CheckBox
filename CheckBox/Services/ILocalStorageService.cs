@@ -1,5 +1,4 @@
-﻿using CheckBox.Enums;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace CheckBox.Services
 {

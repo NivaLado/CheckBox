@@ -1,5 +1,4 @@
 ﻿using CheckBox.Constants;
-using CheckBox.Enums;
 using System.Threading.Tasks;
 
 namespace CheckBox.Services
@@ -8,12 +7,16 @@ namespace CheckBox.Services
     {
         public async Task Login(int userId, ushort loginMethod)
         {
-            await Xamarin.Essentials.SecureStorage.SetAsync(nameof(AppConstants.UserId), userId.ToString());
-            await Xamarin.Essentials.SecureStorage.SetAsync(nameof(AppConstants.LoginMethod), loginMethod.ToString());
+            AppConstants.UserId = userId.ToString();
+            AppConstants.LoginMethod = loginMethod.ToString();
+            await Xamarin.Essentials.SecureStorage.SetAsync(nameof(AppConstants.UserId), AppConstants.UserId);
+            await Xamarin.Essentials.SecureStorage.SetAsync(nameof(AppConstants.LoginMethod), AppConstants.LoginMethod);
         }
 
         public void Logout()
         {
+            AppConstants.UserId = string.Empty;
+            AppConstants.LoginMethod = string.Empty;
             Xamarin.Essentials.SecureStorage.Remove(nameof(AppConstants.UserId));
             Xamarin.Essentials.SecureStorage.Remove(nameof(AppConstants.LoginMethod));
         }

@@ -5,6 +5,7 @@
              xmlns:viewmodels="clr-namespace:CheckBox.ViewModels" 
              xmlns:model="clr-namespace:CheckBox.Models"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Shell.PresentationMode="ModalAnimated"
              Title="New Album"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
@@ -18,11 +19,10 @@
             <ScrollView Grid.Row="0">
                 <StackLayout>
                     <Label Text="Text" FontSize="Medium" />
-                    <Entry Text="{Binding Text, Mode=TwoWay}" FontSize="Medium" />
+                    <Entry Text="{Binding Text}" FontSize="Medium" />
                     <Label Text="Description" FontSize="Medium" />
                     <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
                     <StackLayout Orientation="Horizontal">
-                        <Button Text="Take Photo" Command="{Binding PhotoCommand}" HorizontalOptions="FillAndExpand"></Button>
                         <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
                         <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
                     </StackLayout>
@@ -38,7 +38,7 @@
                                     <AbsoluteLayout VerticalOptions="FillAndExpand"
                                                 AbsoluteLayout.LayoutBounds="0,1,1,1"
                                                 AbsoluteLayout.LayoutFlags="All">
-                                        <Image Source="{Binding Url}"
+                                        <ff:CachedImage Source="{Binding MyProperty}"
                                            Aspect="AspectFill"
                                            AbsoluteLayout.LayoutBounds="0,1,1,1"
                                            AbsoluteLayout.LayoutFlags="All" />
@@ -50,7 +50,8 @@
                 </StackLayout>
             </ScrollView>
             
-            <Button Grid.Row="0" 
+            <Button Grid.Row="0"
+                    Command="{Binding PhotoCommand}"
                     Text="Add photo" 
                     BorderColor="#2b3c3c" 
                     BorderWidth="1" 
