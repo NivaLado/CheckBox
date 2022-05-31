@@ -6,7 +6,7 @@
 
 		public static string AppName = "CheckBoxDevelopment";
 		public static string AlbumFolderFormat = "MMddyyyyHHmmss";
-		public static string UserId;
+		public static int UserId;
 		public static string LoginMethod;
 
 		// OAuth

@@ -49,14 +49,14 @@ namespace CheckBox.ViewModels
                 Items.Clear();
                 var items = new ObservableCollection<GalleryItem>() 
                 {
-                    new GalleryItem() { Id = 0, Title = "Name 0", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
-                    new GalleryItem() { Id = 1, Title = "Name 1", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
-                    new GalleryItem() { Id = 2, Title = "Name 2", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" },
-                    new GalleryItem() { Id = 3, Title = "Name 3", Url = "https://dummyimage.com/500x500/46bf13/677d64.jpg" },
-                    new GalleryItem() { Id = 4, Title = "Name 4", Url = "https://dummyimage.com/1000x1000/46bf13/c20000.jpg" },
-                    new GalleryItem() { Id = 5, Title = "Name 5", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
-                    new GalleryItem() { Id = 6, Title = "Name 6", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
-                    new GalleryItem() { Id = 7, Title = "Name 7", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" }
+                    new GalleryItem() { Id = 0, Title = "Title 0", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
+                    new GalleryItem() { Id = 1, Title = "Title 1", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
+                    new GalleryItem() { Id = 2, Title = "Title 2", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" },
+                    new GalleryItem() { Id = 3, Title = "Title 3", Url = "https://dummyimage.com/500x500/46bf13/677d64.jpg" },
+                    new GalleryItem() { Id = 4, Title = "Title 4", Url = "https://dummyimage.com/1000x1000/46bf13/c20000.jpg" },
+                    new GalleryItem() { Id = 5, Title = "Title 5", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
+                    new GalleryItem() { Id = 6, Title = "Title 6", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
+                    new GalleryItem() { Id = 7, Title = "Title 7", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" }
                 };
 
                 foreach (var item in items)

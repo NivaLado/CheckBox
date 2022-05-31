@@ -31,14 +31,14 @@
                             BindableLayout.ItemsSource="{Binding Checks}"
                             Wrap="Wrap">
                         <BindableLayout.ItemTemplate>
-                            <DataTemplate x:DataType="model:CheckItem">
+                            <DataTemplate x:DataType="x:String">
                                 <StackLayout FlexLayout.Basis="50%"
                                          HeightRequest="250"
                                          Margin="10">
                                     <AbsoluteLayout VerticalOptions="FillAndExpand"
                                                 AbsoluteLayout.LayoutBounds="0,1,1,1"
                                                 AbsoluteLayout.LayoutFlags="All">
-                                        <ff:CachedImage Source="{Binding MyProperty}"
+                                        <ff:CachedImage Source="{Binding}"
                                            Aspect="AspectFill"
                                            AbsoluteLayout.LayoutBounds="0,1,1,1"
                                            AbsoluteLayout.LayoutFlags="All" />

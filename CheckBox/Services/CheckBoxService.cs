@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SharedLayer.Dto;
+using System.IO;
+using System.Net.Http.Headers;
+using System.Linq;
 
 namespace CheckBox.Services
 {
@@ -93,9 +96,42 @@ namespace CheckBox.Services
             return 0;
         }
 
-        public Task<bool> AddAlbumAsync(Album item)
+        public async Task<bool> AddAlbumAsync(Album album)
         {
-            throw new NotImplementedException();
+            using (var content = new MultipartFormDataContent())
+            {
+                List<FileStream> fileStream = new List<FileStream>();
+                foreach(var check in album.CheckPath)
+                {
+                    fileStream.Add(new FileStream(check, FileMode.Open));
+                    var streamContent = new StreamContent(fileStream.Last());
+                    streamContent.Headers.Add("Content-Type", "application/octet-stream");
+                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + Path.GetFileName(check) + "\"");
+                    content.Add(streamContent, "files", Path.GetFileName(check));
+                }
+
+                var albumDto = new AlbumDto() 
+                { 
+                    Title = album.Title,
+                    Description = album.Description,
+                    FolderName = album.FolderName,
+                    UserId = AppConstants.UserId,
+                    CreationTime = DateTime.UtcNow
+                };
+
+                var stringContent = new StringContent(JsonConvert.SerializeObject(albumDto));
+                stringContent.Headers.Add("Content-Disposition", "form-data; name=\"json\"");
+                content.Add(stringContent, "json");
+
+                var response = await httpClient.PostAsync(RouteConstants.AddAlbum, content);
+
+                foreach(var steam in fileStream)
+                {
+                    steam.Dispose();
+                }
+            }
+
+            return await Task.FromResult(true);
         }
 
         public Task<bool> DeleteAlbumAsync(string id)

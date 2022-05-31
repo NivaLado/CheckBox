@@ -19,7 +19,7 @@ namespace CheckBox.Droid
 		{
 			base.OnCreate(savedInstanceState);
 
-			// Convert Android.Net.Url to Uri
+			// Convert Android.Net.Path to Uri
 			var uri = new Uri(Intent.Data.ToString());
 
 			// Load redirectUrl page

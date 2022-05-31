@@ -13,9 +13,13 @@ namespace CheckBox.Services
         Task<int> Login(string email, string password);
 
         Task<bool> AddAlbumAsync(Album item);
+
         Task<bool> UpdateItemAsync(Album item);
+
         Task<bool> DeleteAlbumAsync(string id);
+
         Task<Album> GetAlbumAsync(string id);
+
         Task<IEnumerable<Album>> GetAlbumsAsync(bool forceRefresh = false);
     }
 }

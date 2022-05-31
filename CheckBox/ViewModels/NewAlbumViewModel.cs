@@ -7,6 +7,8 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -18,56 +20,19 @@ namespace CheckBox.ViewModels
         private string name;
         private string description;
         private string albumName;
-        private string uniquePhotoName;
-        public ObservableCollection<CheckItem> Checks { get; }
+
+        public ObservableCollection<string> Checks { get; set; }
 
         public NewAlbumViewModel()
         {
-            SaveCommand = new Command(OnSave, ValidateSave);
+            SaveCommand = new Command(OnSave); //, ValidateSave);
             CancelCommand = new Command(OnCancel);
             PhotoCommand = new Command(async () => await TakePhotoAsync());
             PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
-            var tempCheckItem = new CheckItem() { Url = "https://dummyimage.com/1000x1000/46bf13/c20000.jpg" };
-
-            Checks = new ObservableCollection<CheckItem>();
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
-            //Checks.Add(tempCheckItem);
+            Checks = new ObservableCollection<string>();
+            Checks.Add("https://dummyimage.com/1000x1000/46bf13/c20000.jpg");
         }
 
         public string PhotoPath { get; set; }
@@ -105,35 +70,23 @@ namespace CheckBox.ViewModels
                     Console.WriteLine("No Camera", ":( No camera available.", "OK");
                     return;
                 }
-                var albumFolder = Path.Combine(AppConstants.UserDirectory, DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat));
-                //var cacheFolder = PCLStorage.FileSystem.Current.LocalStorage;
-                //var path = Path.Combine(cacheFolder.Path, albumFolder);
+                var userDirectory = AppConstants.UserDirectory;
+                albumName ??= DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat);
+                var albumFolder = Path.Combine(albumName, DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat));
                 var fileName = string.Concat(Guid.NewGuid().ToString().Replace("-", ""), $".jpg");
 
                 var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
                 {
                     SaveToAlbum = true,
-                    Directory = albumFolder,
-                    CompressionQuality = 1,
-                    CustomPhotoSize = 50,
-                    PhotoSize = PhotoSize.MaxWidthHeight,
+                    Directory = userDirectory,
+                    CompressionQuality = 80,
+                    PhotoSize = PhotoSize.Medium,
                     MaxWidthHeight = 2000,
                     DefaultCamera = CameraDevice.Rear,
                     Name = fileName
                 });
 
-                //await LoadPhotoAsync(file.Path, fileName);
-
-                var imageStream = ImageSource.FromStream(() =>
-                {
-                    var stream = file.GetStream();
-                    file.Dispose();
-                    return stream;
-                });
-
-
-                Checks.Add(new CheckItem() { MyProperty = imageStream });
-               
+                Checks.Add(file?.Path);
                 Console.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
             }
             catch (FeatureNotSupportedException fnsEx)
@@ -150,47 +103,6 @@ namespace CheckBox.ViewModels
             }
         }
 
-        async Task LoadPhotoAsync(string filePath, string fileName)
-        {
-            // canceled
-            if (filePath == null)
-            {
-                PhotoPath = null;
-                return;
-            }
-            
-            IFolder folderPath;
-            var albumFolder = Path.Combine(DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat), AppConstants.UserDirectory);
-            var cacheFolder = PCLStorage.FileSystem.Current.LocalStorage;
-            var path = Path.Combine(cacheFolder.Path, albumFolder);
-            // Create or open cacheFolder
-            if (cacheFolder.CheckExistsAsync(path).Result == ExistenceCheckResult.FolderExists)
-            {
-                folderPath = cacheFolder.GetFolderAsync(path).Result;
-            }
-            else
-            {
-                folderPath = await cacheFolder.CreateFolderAsync(path, CreationCollisionOption.ReplaceExisting);
-            }
-
-            // create a file, overwriting any existing file
-            IFile file = await folderPath.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
-
-            // populate the file with image data
-            var photoStream = File.ReadAllBytes(filePath);
-            using (Stream stream = await file.OpenAsync(PCLStorage.FileAccess.ReadAndWrite))
-            {
-                var imageStream = ImageSource.FromStream(() =>
-                {
-                    return stream;
-                });
-                Checks.Add(new CheckItem() { MyProperty = imageStream });
-
-                stream.Write(photoStream, 0, photoStream.Length);
-                stream.Dispose();
-            }
-        }
-
         private async void OnCancel()
         {
             await Shell.Current.GoToAsync("..");
@@ -200,10 +112,14 @@ namespace CheckBox.ViewModels
         {
             Album newAlbum = new Album()
             {
-                Id = Guid.NewGuid().ToString(),
-                Name = Name,
-                Description = Description
+                FolderName = albumName,
+                Title = Name,
+                Description = Description,
+                CheckPath = Checks.ToList(),
+                CreationTime = DateTime.UtcNow
             };
+
+            await CheckBoxService.AddAlbumAsync(newAlbum);
 
             await Shell.Current.GoToAsync("..");
         }

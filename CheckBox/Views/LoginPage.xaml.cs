@@ -28,14 +28,15 @@ namespace CheckBox.Views
 
             try
             {
-                AppConstants.UserId = await Xamarin.Essentials.SecureStorage.GetAsync(nameof(AppConstants.UserId));
+                int.TryParse(await Xamarin.Essentials.SecureStorage.GetAsync(nameof(AppConstants.UserId)), out int userId);
+                AppConstants.UserId = userId;
             }
             catch (System.Exception)
             {
                 throw;
             }
 
-            if (AppConstants.UserId != null)
+            if (AppConstants.UserId > 0)
             {
                 AppConstants.LoginMethod = await Xamarin.Essentials.SecureStorage.GetAsync(nameof(AppConstants.LoginMethod));
                 await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");

@@ -6,5 +6,7 @@
         public const string RegisterUrl = "api/AppUser";
         public const string GoogleLogin = "api/AppUser/google";
         public const string Login = "api/AppUser/login";
+
+        public const string AddAlbum = "api/Gallery";
     }
 }

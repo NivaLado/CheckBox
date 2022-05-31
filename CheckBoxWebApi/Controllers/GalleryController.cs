@@ -2,6 +2,8 @@
 using CheckBoxWebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using SharedLayer.Dto;
 
 namespace CheckBoxWebApi.Controllers
 {
@@ -9,9 +11,14 @@ namespace CheckBoxWebApi.Controllers
     [ApiController]
     public class GalleryController : Controller
     {
+        private readonly IWebHostEnvironment _env;
         private readonly CheckBoxDbContext _context;
 
-        public GalleryController(CheckBoxDbContext context) => _context = context;
+        public GalleryController(CheckBoxDbContext context, IWebHostEnvironment env) 
+        {
+            _env = env;
+            _context = context;
+        }
 
         [Route("albums")]
         [HttpGet]
@@ -37,19 +44,48 @@ namespace CheckBoxWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAlbum(Album album)
+        public async Task<IActionResult> AddAlbum()
         {
-            // var userWithThatEmailExist = await GetByUserEmail(user.Email);
+            try
+            {
+                var httpRequest = HttpContext.Request;              
+                var albumDto = JsonConvert.DeserializeObject<AlbumDto>(HttpContext.Request.Form["json"]);
 
-            //if (userWithThatEmailExist)
-            //{
-            //    return BadRequest("User already exist");
-            //}
+                if (httpRequest.Form.Files.Count > 0 && albumDto != null)
+                {
+                    var album = new Album()
+                    {
+                        UserId = albumDto.UserId,
+                        Title = albumDto.Title,
+                        Description = albumDto.Description,
+                        ThumbnailUrl = albumDto.ThumbnailUrl,
+                        FolderName = albumDto.FolderName,
+                        CreationTime = albumDto.CreationTime
+                    };
+                    var result = await _context.Albums.AddAsync(album);
+                    await _context.SaveChangesAsync();
+                    foreach (var file in httpRequest.Form.Files)
+                    {
+                        var filePath = Path.Combine(_env.ContentRootPath, "uploads", album.UserId.ToString(), album.FolderName);
 
-            var result = await _context.Albums.AddAsync(album);
-            await _context.SaveChangesAsync();
+                        if (!Directory.Exists(filePath))
+                            Directory.CreateDirectory(filePath);
 
-            return CreatedAtAction(nameof(GetByAlbumsIdAsync), new { id = result.Entity.Id }, result.Entity);
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await file.CopyToAsync(memoryStream); System.IO.File.WriteAllBytes(Path.Combine(filePath, file.FileName), memoryStream.ToArray());
+                        }
+
+                    }
+                    return CreatedAtAction(nameof(GetByAlbumsIdAsync), new { id = result.Entity.Id }, result.Entity);
+                }
+                return new StatusCodeResult(500);
+            }
+            catch (Exception e)
+            {
+                //_logger.LogError(e, "Error");
+                return new StatusCodeResult(500);
+            }            
         }
     }
 }
