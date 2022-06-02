@@ -19,7 +19,7 @@ namespace CheckBox.ViewModels
     {
         private string name;
         private string description;
-        private string albumName;
+        private string folderName;
 
         public ObservableCollection<string> Checks { get; set; }
 
@@ -27,12 +27,12 @@ namespace CheckBox.ViewModels
         {
             SaveCommand = new Command(OnSave); //, ValidateSave);
             CancelCommand = new Command(OnCancel);
-            PhotoCommand = new Command(async () => await TakePhotoAsync());
+            PickPhotoCommand = new Command(async () => await PickFromGallery());
+            TakePhotoCommand = new Command(async () => await TakePhotoAsync());
             PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
 
             Checks = new ObservableCollection<string>();
-            Checks.Add("https://dummyimage.com/1000x1000/46bf13/c20000.jpg");
         }
 
         public string PhotoPath { get; set; }
@@ -59,7 +59,44 @@ namespace CheckBox.ViewModels
 
         public Command CancelCommand { get; }
 
-        public Command PhotoCommand { get; }
+        public Command TakePhotoCommand { get; }
+
+        public Command PickPhotoCommand { get; set; }
+
+        private async Task PickFromGallery()
+        {
+            try
+            {
+                if (!CrossMedia.Current.IsPickPhotoSupported)
+                {
+                    throw new AccessViolationException("No Pick photo supported");
+                }
+
+                var fileName = string.Concat(Guid.NewGuid().ToString().Replace("-", ""), $".jpg");
+
+                var file = await CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                {
+                    MaxWidthHeight = SettingConstants.MaxWidthHeight,
+                    PhotoSize = SettingConstants.PhotoSize,
+                    CompressionQuality = SettingConstants.CompressionQuality,
+                    RotateImage = SettingConstants.RotateImage
+                });
+
+                Checks.Add(file?.Path);
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                Console.WriteLine($"CapturePhotoAsync THREW: {fnsEx.Message}");
+            }
+            catch (PermissionException pEx)
+            {
+                Console.WriteLine($"CapturePhotoAsync THREW: {pEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
+            }
+        }
 
         private async Task TakePhotoAsync()
         {
@@ -70,19 +107,19 @@ namespace CheckBox.ViewModels
                     Console.WriteLine("No Camera", ":( No camera available.", "OK");
                     return;
                 }
-                var userDirectory = AppConstants.UserDirectory;
-                albumName ??= DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat);
-                var albumFolder = Path.Combine(albumName, DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat));
+
+                folderName ??= DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat);
                 var fileName = string.Concat(Guid.NewGuid().ToString().Replace("-", ""), $".jpg");
 
                 var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
                 {
-                    SaveToAlbum = true,
-                    Directory = userDirectory,
-                    CompressionQuality = 80,
-                    PhotoSize = PhotoSize.Medium,
-                    MaxWidthHeight = 2000,
-                    DefaultCamera = CameraDevice.Rear,
+                    AllowCropping = SettingConstants.AllowCropping,
+                    DefaultCamera = SettingConstants.DefaultCamera,
+                    MaxWidthHeight = SettingConstants.MaxWidthHeight,
+                    SaveToAlbum = SettingConstants.SaveToAlbum,
+                    PhotoSize = SettingConstants.PhotoSize,
+                    CompressionQuality = SettingConstants.CompressionQuality,
+                    RotateImage = SettingConstants.RotateImage,
                     Name = fileName
                 });
 
@@ -112,7 +149,7 @@ namespace CheckBox.ViewModels
         {
             Album newAlbum = new Album()
             {
-                FolderName = albumName,
+                FolderName = folderName,
                 Title = Name,
                 Description = Description,
                 CheckPath = Checks.ToList(),

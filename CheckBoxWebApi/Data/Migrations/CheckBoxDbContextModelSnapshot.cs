@@ -106,33 +106,6 @@ namespace CheckBoxWebApi.Data.Migrations
 
                     b.ToTable("AppUsers");
                 });
-
-            modelBuilder.Entity("CheckBoxWebApi.Models.Check", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AlbumId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EditTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Checks");
-                });
 #pragma warning restore 612, 618
         }
     }

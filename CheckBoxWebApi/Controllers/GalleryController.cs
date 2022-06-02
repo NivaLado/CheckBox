@@ -27,20 +27,13 @@ namespace CheckBoxWebApi.Controllers
             return await _context.Albums.ToListAsync();
         }
 
-        [Route("albums/{id}")]
         [HttpGet]
-        public async Task<IActionResult> GetByAlbumsIdAsync(long id)
+        [ProducesResponseType(typeof(Album), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByAlbumIdAsync(int id)
         {
             var album = await _context.Albums.FindAsync(id);
             return album == null ? NotFound() : Ok(album);
-        }
-
-
-        [Route("checks")]
-        [HttpGet]
-        public async Task<IEnumerable<Check>> GetChecksAsync()
-        {
-            return await _context.Checks.ToListAsync();
         }
 
         [HttpPost]
@@ -77,7 +70,7 @@ namespace CheckBoxWebApi.Controllers
                         }
 
                     }
-                    return CreatedAtAction(nameof(GetByAlbumsIdAsync), new { id = result.Entity.Id }, result.Entity);
+                    return Ok();
                 }
                 return new StatusCodeResult(500);
             }

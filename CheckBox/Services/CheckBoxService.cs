@@ -116,7 +116,8 @@ namespace CheckBox.Services
                     Description = album.Description,
                     FolderName = album.FolderName,
                     UserId = AppConstants.UserId,
-                    CreationTime = DateTime.UtcNow
+                    CreationTime = DateTime.UtcNow,
+                    ThumbnailUrl = Path.GetFileName(album.CheckPath.First()) // Todo: Make more elegant thumnail picking
                 };
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(albumDto));
@@ -125,7 +126,7 @@ namespace CheckBox.Services
 
                 var response = await httpClient.PostAsync(RouteConstants.AddAlbum, content);
 
-                foreach(var steam in fileStream)
+                foreach (var steam in fileStream)
                 {
                     steam.Dispose();
                 }

@@ -48,22 +48,6 @@ namespace CheckBoxWebApi.Data.Migrations
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Checks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AlbumId = table.Column<int>(type: "int", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EditTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Checks", x => x.Id);
-                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -73,9 +57,6 @@ namespace CheckBoxWebApi.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppUsers");
-
-            migrationBuilder.DropTable(
-                name: "Checks");
         }
     }
 }
