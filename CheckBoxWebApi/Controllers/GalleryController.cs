@@ -20,17 +20,10 @@ namespace CheckBoxWebApi.Controllers
             _context = context;
         }
 
-        [Route("albums")]
-        [HttpGet]
-        public async Task<IEnumerable<Album>> GetAlbumsAsync()
-        {
-            return await _context.Albums.ToListAsync();
-        }
-
         [HttpGet]
         [ProducesResponseType(typeof(Album), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByAlbumIdAsync(int id)
+        public async Task<IActionResult> GetAlbum(int id)
         {
             var album = await _context.Albums.FindAsync(id);
             return album == null ? NotFound() : Ok(album);
@@ -41,7 +34,7 @@ namespace CheckBoxWebApi.Controllers
         {
             try
             {
-                var httpRequest = HttpContext.Request;              
+                var httpRequest = HttpContext.Request;
                 var albumDto = JsonConvert.DeserializeObject<AlbumDto>(HttpContext.Request.Form["json"]);
 
                 if (httpRequest.Form.Files.Count > 0 && albumDto != null)
@@ -76,9 +69,47 @@ namespace CheckBoxWebApi.Controllers
             }
             catch (Exception e)
             {
-                //_logger.LogError(e, "Error");
                 return new StatusCodeResult(500);
-            }            
+            }
+        }
+
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteAlbum(int albumId)
+        {
+            var albumToDelete = _context.Albums.Find(albumId);
+            if (albumToDelete != null)
+            {
+                _context.Albums.Remove(albumToDelete);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        [HttpPut()]
+        public async Task<IActionResult> UpdateAlbum(AlbumDto albumDto)
+        {
+            var albumToUpdate = _context.Albums.Where(s => s.Id == albumDto.Id).FirstOrDefault();
+
+            if (albumToUpdate != null)
+            {
+                albumToUpdate.Title = albumDto.Title ?? albumToUpdate.Title;
+                albumToUpdate.Description = albumDto.Description ?? albumToUpdate.Description;
+                albumToUpdate.EditTime = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+
+        [HttpGet("byUserId/{userId}")]
+        public async Task<IEnumerable<Album>> GetAlbumsByUserIdAsync(int userId)
+        {
+            var query = _context.Albums.Where(w => w.UserId == userId);
+            return await query.ToListAsync();
         }
     }
 }

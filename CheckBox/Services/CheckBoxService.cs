@@ -135,17 +135,22 @@ namespace CheckBox.Services
             return await Task.FromResult(true);
         }
 
-        public Task<bool> DeleteAlbumAsync(string id)
+        public Task<Album> GetAlbumAsync(int albumId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Album> GetAlbumAsync(string id)
+        public async Task<List<Album>> GetAlbumsAsync(int userId)
         {
-            throw new NotImplementedException();
+            var url = string.Format(RouteConstants.GetAlbums, userId);
+            var response = await httpClient.GetAsync(url);
+            var responseMessage = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<Album>>(responseMessage);
+
+            return result;
         }
 
-        public Task<IEnumerable<Album>> GetAlbumsAsync(bool forceRefresh = false)
+        public Task<bool> DeleteAlbumAsync(int albumId)
         {
             throw new NotImplementedException();
         }

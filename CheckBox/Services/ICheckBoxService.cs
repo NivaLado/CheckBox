@@ -16,10 +16,10 @@ namespace CheckBox.Services
 
         Task<bool> UpdateItemAsync(Album item);
 
-        Task<bool> DeleteAlbumAsync(string id);
+        Task<bool> DeleteAlbumAsync(int albumId);
 
-        Task<Album> GetAlbumAsync(string id);
+        Task<Album> GetAlbumAsync(int albumId);
 
-        Task<IEnumerable<Album>> GetAlbumsAsync(bool forceRefresh = false);
+        Task<List<Album>> GetAlbumsAsync(int userId);
     }
 }

@@ -10,7 +10,6 @@ namespace CheckBox
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             DependencyService.Register<CheckBoxService>();
             DependencyService.Register<LocalStorageService>();
 

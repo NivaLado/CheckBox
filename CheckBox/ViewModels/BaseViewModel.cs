@@ -10,13 +10,12 @@ namespace CheckBox.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
         public ICheckBoxService CheckBoxService => DependencyService.Get<ICheckBoxService>();
 
         public ILocalStorageService LocalStorageService => DependencyService.Get<ILocalStorageService>();
 
         bool isBusy = false;
+
         public bool IsBusy
         {
             get { return isBusy; }

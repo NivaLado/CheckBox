@@ -1,4 +1,5 @@
-﻿using CheckBox.Models;
+﻿using CheckBox.Constants;
+using CheckBox.Models;
 using CheckBox.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -9,9 +10,9 @@ namespace CheckBox.ViewModels
 {
     public class GalleryViewModel : BaseViewModel
     {
-        private GalleryItem _selectedItem;
+        private Album _selectedItem;
 
-        public ObservableCollection<GalleryItem> Items { get; }
+        public ObservableCollection<Album> Albums { get; }
 
         public Command LoadItemsCommand { get; }
 
@@ -23,7 +24,7 @@ namespace CheckBox.ViewModels
         public GalleryViewModel()
         {
             Title = "Gallery";
-            Items = new ObservableCollection<GalleryItem>();
+            Albums = new ObservableCollection<Album>();
             LoadItemsCommand = new Command(ExecuteLoadItemsCommand);
             AddCommand = new Command(ExecuteAddCommand);
             LogoutCommand = new Command(ExecuteLogoutCommand);
@@ -40,28 +41,29 @@ namespace CheckBox.ViewModels
             await Shell.Current.GoToAsync(nameof(NewAlbumPage));
         }
 
-        private void ExecuteLoadItemsCommand()
+        private async void ExecuteLoadItemsCommand()
         {
             IsBusy = true;
 
             try
             {
-                Items.Clear();
-                var items = new ObservableCollection<GalleryItem>() 
-                {
-                    new GalleryItem() { Id = 0, Title = "Title 0", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
-                    new GalleryItem() { Id = 1, Title = "Title 1", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
-                    new GalleryItem() { Id = 2, Title = "Title 2", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" },
-                    new GalleryItem() { Id = 3, Title = "Title 3", Url = "https://dummyimage.com/500x500/46bf13/677d64.jpg" },
-                    new GalleryItem() { Id = 4, Title = "Title 4", Url = "https://dummyimage.com/1000x1000/46bf13/c20000.jpg" },
-                    new GalleryItem() { Id = 5, Title = "Title 5", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
-                    new GalleryItem() { Id = 6, Title = "Title 6", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
-                    new GalleryItem() { Id = 7, Title = "Title 7", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" }
-                };
+                Albums.Clear();
+                var items = await CheckBoxService.GetAlbumsAsync(AppConstants.UserId);
+                //new ObservableCollection<GalleryItem>() 
+                //{
+                //    new GalleryItem() { Id = 0, Title = "Title 0", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
+                //    new GalleryItem() { Id = 1, Title = "Title 1", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
+                //    new GalleryItem() { Id = 2, Title = "Title 2", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" },
+                //    new GalleryItem() { Id = 3, Title = "Title 3", Url = "https://dummyimage.com/500x500/46bf13/677d64.jpg" },
+                //    new GalleryItem() { Id = 4, Title = "Title 4", Url = "https://dummyimage.com/1000x1000/46bf13/c20000.jpg" },
+                //    new GalleryItem() { Id = 5, Title = "Title 5", Url = "https://dummyimage.com/100x100/942e94/1aff00.png" },
+                //    new GalleryItem() { Id = 6, Title = "Title 6", Url = "https://dummyimage.com/200x200/304294/677d64.jpg" },
+                //    new GalleryItem() { Id = 7, Title = "Title 7", Url = "https://dummyimage.com/300x300/943131/677d64.jpg" }
+                //};
 
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    Albums.Add(item);
                 }
             }
             catch (Exception ex)
@@ -80,7 +82,7 @@ namespace CheckBox.ViewModels
             SelectedItem = null;
         }
 
-        public GalleryItem SelectedItem
+        public Album SelectedItem
         {
             get => _selectedItem;
             set
@@ -90,13 +92,13 @@ namespace CheckBox.ViewModels
             }
         }
 
-        async void OnItemSelected(GalleryItem item)
+        async void OnItemSelected(Album item)
         {
             if (item == null)
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            // await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
         }
     }
 }

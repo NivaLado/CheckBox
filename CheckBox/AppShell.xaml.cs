@@ -8,9 +8,6 @@ namespace CheckBox
         public AppShell()
         {
             InitializeComponent();
-            // TODO: Remove this two routes
-            Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
-            Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
 
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
