@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging")); 
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -15,11 +18,11 @@ builder.Services.AddDbContext<CheckBoxDbContext>(o => o.UseSqlServer(builder.Con
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+     app.UseSwagger();
+     app.UseSwaggerUI();
+// }
 
 // app.UseHttpsRedirection();
 
