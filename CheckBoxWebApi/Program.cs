@@ -1,10 +1,15 @@
 using CheckBoxWebApi.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
-builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging")); 
+// builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day));
 
 // Add services to the container.
 

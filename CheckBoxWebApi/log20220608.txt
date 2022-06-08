@@ -1,0 +1,20 @@
+2022-06-08 08:17:05.331 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-06-08 08:17:05.384 +03:00 [INF] Hosting environment: Development
+2022-06-08 08:17:05.385 +03:00 [INF] Content root path: C:\Users\marks\Documents\GitHub\CheckBox\CheckBoxWebApi\
+2022-06-08 08:17:05.389 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:52236/swagger/index.html - -
+2022-06-08 08:17:05.717 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:52236/swagger/swagger-ui-bundle.js - -
+2022-06-08 08:17:05.717 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:52236/swagger/swagger-ui.css - -
+2022-06-08 08:17:05.717 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:52236/_framework/aspnetcore-browser-refresh.js - -
+2022-06-08 08:17:05.724 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:52236/swagger/swagger-ui-standalone-preset.js - -
+2022-06-08 08:17:05.730 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:52236/_vs/browserLink - -
+2022-06-08 08:17:05.736 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:52236/swagger/index.html - - - 200 - text/html;charset=utf-8 349.1713ms
+2022-06-08 08:17:05.738 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:52236/_framework/aspnetcore-browser-refresh.js - - - 200 11998 application/javascript;+charset=utf-8 19.7594ms
+2022-06-08 08:17:05.745 +03:00 [INF] The file /swagger-ui-bundle.js was not modified
+2022-06-08 08:17:05.745 +03:00 [INF] The file /swagger-ui.css was not modified
+2022-06-08 08:17:05.745 +03:00 [INF] The file /swagger-ui-standalone-preset.js was not modified
+2022-06-08 08:17:05.746 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:52236/swagger/swagger-ui.css - - - 304 - text/css 28.9869ms
+2022-06-08 08:17:05.746 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:52236/swagger/swagger-ui-bundle.js - - - 304 - application/javascript 29.0095ms
+2022-06-08 08:17:05.746 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:52236/swagger/swagger-ui-standalone-preset.js - - - 304 - application/javascript 24.0341ms
+2022-06-08 08:17:06.042 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:52236/_vs/browserLink - - - 200 - text/javascript;+charset=UTF-8 311.6315ms
+2022-06-08 08:17:06.106 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:52236/swagger/v1/swagger.json - -
+2022-06-08 08:17:06.187 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:52236/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 80.8913ms
