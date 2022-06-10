@@ -1,0 +1,26 @@
+﻿
+// WIN-SMBMFOH18RL\\SQLEXPRESS
+// LAPTOP-NMS2B956
+// Install SSEI 2019
+// Install SSMS 18
+
+// https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?tabs=aspnetcore2x&view=aspnetcore-6.0
+
+//  select
+//    'data source=' + @@servername +
+//    ';initial catalog=' + db_name() +
+//    case type_desc
+//        when 'WINDOWS_LOGIN' 
+//            then ';trusted_connection=true'
+//        else
+//            ';user id=' + suser_name() + ';password=<<YourPassword>>'
+//    end
+//    as ConnectionString
+//from sys.server_principals
+//where name = suser_name()
+
+// CheckBoxDb
+// Add-Migration createdatabase -o Data/Migrations
+// Update-Database
+// Script-Migration -o Data/Migrations/sql.sql
+// http://10.0.2.2:52236/api/AppUser

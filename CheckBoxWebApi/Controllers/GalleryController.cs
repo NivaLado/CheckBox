@@ -13,11 +13,13 @@ namespace CheckBoxWebApi.Controllers
     {
         private readonly IWebHostEnvironment _env;
         private readonly CheckBoxDbContext _context;
+        private readonly ILogger<GalleryController> _logger;
 
-        public GalleryController(CheckBoxDbContext context, IWebHostEnvironment env) 
+        public GalleryController(CheckBoxDbContext context, IWebHostEnvironment env, ILogger<GalleryController> logger) 
         {
             _env = env;
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -52,7 +54,7 @@ namespace CheckBoxWebApi.Controllers
                     await _context.SaveChangesAsync();
                     foreach (var file in httpRequest.Form.Files)
                     {
-                        var filePath = Path.Combine(_env.ContentRootPath, "uploads", album.UserId.ToString(), album.FolderName);
+                        var filePath = Path.Combine("C:", "Uploads", album.UserId.ToString(), album.FolderName);
 
                         if (!Directory.Exists(filePath))
                             Directory.CreateDirectory(filePath);
@@ -69,6 +71,7 @@ namespace CheckBoxWebApi.Controllers
             }
             catch (Exception e)
             {
+                _logger.LogCritical(e, "Gallery Post controller");
                 return new StatusCodeResult(500);
             }
         }

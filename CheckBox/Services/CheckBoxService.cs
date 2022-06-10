@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SharedLayer.Dto;
 using System.IO;
-using System.Net.Http.Headers;
 using System.Linq;
 
 namespace CheckBox.Services
 {
     public class CheckBoxService : ICheckBoxService
     {
-        static readonly HttpClient httpClient = new HttpClient() { BaseAddress = new Uri(RouteConstants.DomainName) };
+        private static readonly HttpClient httpClient = new HttpClient() { BaseAddress = new Uri(RouteConstants.DomainName) };
+
         public CheckBoxService()
         {
 

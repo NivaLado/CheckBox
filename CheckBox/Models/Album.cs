@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CheckBox.Constants;
+using System;
 using System.Collections.Generic;
 
 namespace CheckBox.Models
@@ -13,12 +14,14 @@ namespace CheckBox.Models
 
         public string Description { get; set; }
 
-        public string Thumbnail { get; set; }
+        public string ThumbnailUrl { get; set; }
 
         public DateTime CreationTime { get; set; }
 
         public DateTime? EditTime { get; set; }
 
         public List<string> CheckPath { get; set; }
+
+        public string ThumbnailFullPath => AppConstants.UserDirectory + $"{FolderName}/{ThumbnailUrl}";
     }
 }

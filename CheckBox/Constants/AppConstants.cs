@@ -1,13 +1,15 @@
-﻿namespace CheckBox.Constants
+﻿using System;
+
+namespace CheckBox.Constants
 {
 	public class AppConstants
 	{
-		public static string UserDirectory => $"{LoginMethod}_{UserId}";
-
+		public static string UploadsFolder = "Uploads";
 		public static string AppName = "CheckBoxDevelopment";
 		public static string AlbumFolderFormat = "MMddyyyyHHmmss";
 		public static int UserId;
 		public static string LoginMethod;
+		public static string UserDirectory => $"{RouteConstants.DomainName}/{UploadsFolder}/{UserId}/";
 
 		// OAuth
 		// For Google login, configure at https://console.developers.google.com/
