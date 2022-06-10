@@ -64,7 +64,6 @@ namespace CheckBox.ViewModels
                 foreach (var item in items)
                 {
                     Albums.Add(item);
-                    var x = item.ThumbnailFullPath;
                 }
             }
             catch (Exception ex)

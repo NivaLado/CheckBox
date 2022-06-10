@@ -27,6 +27,7 @@ namespace CheckBox.ViewModels
         {
             SaveCommand = new Command(OnSave); //, ValidateSave);
             CancelCommand = new Command(OnCancel);
+            RemoveCommand = new Command<string>(OnRemove);
             PickPhotoCommand = new Command(async () => await PickFromGallery());
             TakePhotoCommand = new Command(async () => await TakePhotoAsync());
             PropertyChanged +=
@@ -59,6 +60,8 @@ namespace CheckBox.ViewModels
 
         public Command CancelCommand { get; }
 
+        public Command RemoveCommand { get; }
+
         public Command TakePhotoCommand { get; }
 
         public Command PickPhotoCommand { get; set; }
@@ -82,7 +85,7 @@ namespace CheckBox.ViewModels
                     RotateImage = SettingConstants.RotateImage
                 });
 
-                Checks.Add(file?.Path);
+                addFile(file);
             }
             catch (FeatureNotSupportedException fnsEx)
             {
@@ -123,7 +126,7 @@ namespace CheckBox.ViewModels
                     Name = fileName
                 });
 
-                Checks.Add(file?.Path);
+                addFile(file);
                 Console.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
             }
             catch (FeatureNotSupportedException fnsEx)
@@ -138,6 +141,11 @@ namespace CheckBox.ViewModels
             {
                 Console.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
             }
+        }
+
+        private void OnRemove(string fileName)
+        {
+            Checks.Remove(fileName);
         }
 
         private async void OnCancel()
@@ -159,6 +167,14 @@ namespace CheckBox.ViewModels
             await CheckBoxService.AddAlbumAsync(newAlbum);
 
             await Shell.Current.GoToAsync("..");
+        }
+
+        private void addFile(MediaFile file)
+        {
+            if (file != null)
+            {
+                Checks.Add(file?.Path);
+            }
         }
     }
 }

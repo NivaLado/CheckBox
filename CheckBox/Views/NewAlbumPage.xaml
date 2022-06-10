@@ -5,6 +5,7 @@
              xmlns:viewmodels="clr-namespace:CheckBox.ViewModels" 
              xmlns:model="clr-namespace:CheckBox.Models"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Name="newAlbumPage"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Shell.PresentationMode="ModalAnimated"
              Title="New Album"
@@ -43,7 +44,10 @@
                                            AbsoluteLayout.LayoutBounds="0,1,1,1"
                                            AbsoluteLayout.LayoutFlags="All" />
                                         
-                                        <Button Text="X"
+                                        <Button 
+                                                Command="{Binding RemoveCommand, Source={RelativeSource AncestorType={x:Type viewmodels:NewAlbumViewModel}}}"
+                                                CommandParameter="{Binding}"
+                                                Text="X"
                                                 AbsoluteLayout.LayoutBounds="0.9,0.1,0.2,0.2"
                                                 AbsoluteLayout.LayoutFlags="All"/>
                                     </AbsoluteLayout>
