@@ -117,7 +117,7 @@ namespace CheckBox.Services
                     FolderName = album.FolderName,
                     UserId = AppConstants.UserId,
                     CreationTime = DateTime.UtcNow,
-                    ThumbnailUrl = Path.GetFileName(album.CheckPath.First()) // Todo: Make more elegant thumnail picking
+                    ThumbnailName = Path.GetFileName(album.CheckPath.First()) // Todo: Make more elegant thumnail picking
                 };
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(albumDto));

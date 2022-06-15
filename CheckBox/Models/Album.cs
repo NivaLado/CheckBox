@@ -6,7 +6,7 @@ namespace CheckBox.Models
 {
     public class Album
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Title { get; set; }
 
@@ -14,7 +14,7 @@ namespace CheckBox.Models
 
         public string Description { get; set; }
 
-        public string ThumbnailUrl { get; set; }
+        public string ThumbnailName { get; set; }
 
         public DateTime CreationTime { get; set; }
 
@@ -22,6 +22,6 @@ namespace CheckBox.Models
 
         public List<string> CheckPath { get; set; }
 
-        public string ThumbnailFullPath => AppConstants.UserDirectory + $"{FolderName}/{ThumbnailUrl}";
+        public string ThumbnailFullPath => AppConstants.UserDirectory + $"{FolderName}/{ThumbnailName}";
     }
 }

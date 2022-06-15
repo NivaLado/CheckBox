@@ -18,6 +18,8 @@ namespace CheckBox.ViewModels
 
         public Command AddCommand { get; }
 
+        public Command RemoveCommand { get; }
+
         // TODO: Change logout place
         public Command LogoutCommand { get; }
 
@@ -28,6 +30,12 @@ namespace CheckBox.ViewModels
             LoadItemsCommand = new Command(ExecuteLoadItemsCommand);
             AddCommand = new Command(ExecuteAddCommand);
             LogoutCommand = new Command(ExecuteLogoutCommand);
+            RemoveCommand = new Command<int>(OnRemove);
+        }
+
+        private async void OnRemove(int albumId)
+        {
+            // call service to remove album.
         }
 
         private async void ExecuteLogoutCommand()

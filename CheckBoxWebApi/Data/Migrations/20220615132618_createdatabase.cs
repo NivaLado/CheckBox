@@ -18,8 +18,8 @@ namespace CheckBoxWebApi.Data.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FolderName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ThumbnailName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    FolderName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EditTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -42,11 +42,25 @@ namespace CheckBoxWebApi.Data.Migrations
                     Surname = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: true),
                     AccountCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Picture = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AlbumId = table.Column<int>(type: "int", nullable: false),
+                    ImageName = table.Column<string>(type: "nvarchar(24)", maxLength: 24, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
                 });
         }
 
@@ -57,6 +71,9 @@ namespace CheckBoxWebApi.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppUsers");
+
+            migrationBuilder.DropTable(
+                name: "Images");
         }
     }
 }

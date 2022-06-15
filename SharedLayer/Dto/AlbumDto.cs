@@ -12,7 +12,7 @@ namespace SharedLayer.Dto
 
         public string Description { get; set; }
 
-        public string ThumbnailUrl { get; set; }
+        public string ThumbnailName { get; set; }
 
         public string FolderName { get; set; }
 

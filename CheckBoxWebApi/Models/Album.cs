@@ -9,6 +9,7 @@ namespace CheckBoxWebApi.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [ForeignKey(nameof(AppUser))]
         public int UserId { get; set; }
 
         [Required]
@@ -19,9 +20,11 @@ namespace CheckBoxWebApi.Models
         public string Description { get; set; }
 
         [Required]
-        public string ThumbnailUrl { get; set; }
+        [MaxLength(256)]
+        public string ThumbnailName { get; set; }
 
         [Required]
+        [MaxLength(256)]
         public string FolderName { get; set; }
 
         public DateTime CreationTime { get; set; }

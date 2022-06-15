@@ -10,14 +10,12 @@ namespace CheckBoxWebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class GalleryController : Controller
-    {
-        private readonly IWebHostEnvironment _env;
+    { 
         private readonly CheckBoxDbContext _context;
         private readonly ILogger<GalleryController> _logger;
 
-        public GalleryController(CheckBoxDbContext context, IWebHostEnvironment env, ILogger<GalleryController> logger) 
+        public GalleryController(CheckBoxDbContext context, ILogger<GalleryController> logger) 
         {
-            _env = env;
             _context = context;
             _logger = logger;
         }
@@ -46,7 +44,7 @@ namespace CheckBoxWebApi.Controllers
                         UserId = albumDto.UserId,
                         Title = albumDto.Title,
                         Description = albumDto.Description,
-                        ThumbnailUrl = albumDto.ThumbnailUrl,
+                        ThumbnailName = albumDto.ThumbnailName,
                         FolderName = albumDto.FolderName,
                         CreationTime = albumDto.CreationTime
                     };
@@ -54,17 +52,17 @@ namespace CheckBoxWebApi.Controllers
                     await _context.SaveChangesAsync();
                     foreach (var file in httpRequest.Form.Files)
                     {
-                        var filePath = Path.Combine("C:", "Uploads", album.UserId.ToString(), album.FolderName);
+                        var directory = Path.Combine("C:", "Uploads", album.UserId.ToString(), album.FolderName);
 
-                        if (!Directory.Exists(filePath))
-                            Directory.CreateDirectory(filePath);
+                        if (!Directory.Exists(directory))
+                            Directory.CreateDirectory(directory);
 
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await file.CopyToAsync(memoryStream); System.IO.File.WriteAllBytes(Path.Combine(filePath, file.FileName), memoryStream.ToArray());
-                        }
+                        using var memoryStream = new MemoryStream();
+                        await file.CopyToAsync(memoryStream); 
+                        System.IO.File.WriteAllBytes(Path.Combine(directory, file.FileName), memoryStream.ToArray());
 
                     }
+
                     return Ok();
                 }
                 return new StatusCodeResult(500);
@@ -113,6 +111,63 @@ namespace CheckBoxWebApi.Controllers
         {
             var query = _context.Albums.Where(w => w.UserId == userId);
             return await query.ToListAsync();
+        }
+
+        [HttpPost("images/{albumId}")]
+        public async Task AddImages(IEnumerable<string> fileNameList,[FromRoute] int albumId)
+        {
+            List<Image> images = new();
+
+            foreach (var fileName in fileNameList)
+            {
+                images.Add(new Image { ImageName = fileName, AlbumId = albumId });
+            }
+
+            if (images.Any())
+            {
+                await _context.Images.AddRangeAsync(images);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        [HttpGet("images")]
+        public async Task<IEnumerable<Image>> GetImages(int albumId)
+        {
+            var query = _context.Images.Where(i => i.AlbumId == albumId);
+            return await query.ToListAsync();
+        }
+
+        [HttpDelete("images")]
+        public async Task<IActionResult> DeleteImages(IEnumerable<string> fileNameList, int userId, string folderName)
+        {
+            List<string> imageNames = new();
+            var directory = Path.Combine(WebApiConstants.UploadsDisc, WebApiConstants.UploadsFolder, userId.ToString(), folderName);
+
+            if (!Directory.Exists(directory))
+            {
+                return BadRequest($"Directory does not exist: {directory}");
+            }
+
+            foreach (var fileName in fileNameList)
+            {
+                var imagePath = Path.Combine(directory, fileName);
+
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                imageNames.Add(fileName);
+            }
+
+            if (imageNames.Any())
+            {
+                var imagesToDelete = _context.Images.Where(i => imageNames.Contains(i.ImageName)).ToList();
+                _context.Images.RemoveRange(imagesToDelete);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
         }
     }
 }

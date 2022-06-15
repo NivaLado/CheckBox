@@ -15,8 +15,8 @@ namespace CheckBoxWebApi.Models
         [Required]
         public ushort AuthorizationMethod { get; set; }
 
-        [MaxLength(24)]
         [Required]
+        [MaxLength(24)]
         public string Email { get; set; }
 
         [MaxLength(24)]
@@ -32,6 +32,7 @@ namespace CheckBoxWebApi.Models
 
         public DateTime LastLogin { get; set; }
 
+        [MaxLength(256)]
         public string Picture { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace CheckBox.ViewModels
 
         public NewAlbumViewModel()
         {
-            SaveCommand = new Command(OnSave); //, ValidateSave);
+            SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
             RemoveCommand = new Command<string>(OnRemove);
             PickPhotoCommand = new Command(async () => await PickFromGallery());
@@ -41,7 +41,8 @@ namespace CheckBox.ViewModels
         private bool ValidateSave()
         {
             return !string.IsNullOrWhiteSpace(name)
-                && !string.IsNullOrWhiteSpace(description);
+                && !string.IsNullOrWhiteSpace(description)
+                && Checks.Count >=  1;
         }
 
         public string Name
@@ -85,7 +86,7 @@ namespace CheckBox.ViewModels
                     RotateImage = SettingConstants.RotateImage
                 });
 
-                addFile(file);
+                AddFile(file);
             }
             catch (FeatureNotSupportedException fnsEx)
             {
@@ -116,6 +117,7 @@ namespace CheckBox.ViewModels
 
                 var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
                 {
+                    SaveMetaData = false,
                     AllowCropping = SettingConstants.AllowCropping,
                     DefaultCamera = SettingConstants.DefaultCamera,
                     MaxWidthHeight = SettingConstants.MaxWidthHeight,
@@ -126,7 +128,7 @@ namespace CheckBox.ViewModels
                     Name = fileName
                 });
 
-                addFile(file);
+                AddFile(file);
                 Console.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
             }
             catch (FeatureNotSupportedException fnsEx)
@@ -169,7 +171,7 @@ namespace CheckBox.ViewModels
             await Shell.Current.GoToAsync("..");
         }
 
-        private void addFile(MediaFile file)
+        private void AddFile(MediaFile file)
         {
             if (file != null)
             {

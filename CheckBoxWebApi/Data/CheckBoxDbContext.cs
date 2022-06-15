@@ -14,5 +14,7 @@ namespace CheckBoxWebApi.Data
         public DbSet<AppUser> AppUsers { get; set; }
 
         public DbSet<Album> Albums { get; set; }
+
+        public DbSet<Image> Images { get; set; }
     }
 }
