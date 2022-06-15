@@ -14,12 +14,16 @@ namespace CheckBox.Services
 
         Task<bool> AddAlbumAsync(Album item);
 
-        Task<bool> UpdateItemAsync(Album item);
-
-        Task<bool> DeleteAlbumAsync(int albumId);
+        Task DeleteAlbumAsync(int albumId);
 
         Task<Album> GetAlbumAsync(int albumId);
 
         Task<List<Album>> GetAlbumsAsync(int userId);
+
+        Task<List<Images>> GetImages(int albumId);
+
+        // TODO: Move to helpers instead of service
+
+        string GetImageFullPath(string folderName, string imageName);
     }
 }

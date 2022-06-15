@@ -11,7 +11,7 @@ namespace CheckBox.Views
     {
         public string UserExist { get; set; }
 
-        LoginViewModel _viewModel;
+        readonly LoginViewModel _viewModel;
 
         public LoginPage()
         {
@@ -33,7 +33,7 @@ namespace CheckBox.Views
             }
             catch (System.Exception)
             {
-                throw;
+                await Shell.Current.GoToAsync($"//{nameof(LoginPage)}");
             }
 
             if (AppConstants.UserId > 0)

@@ -27,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\EditAlbumPage.xaml.cs">
+      <DependentUpon>EditAlbumPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\RegistrationPage.xaml.cs">
       <DependentUpon>RegistrationPage.xaml</DependentUpon>
     </Compile>

@@ -3,6 +3,7 @@ using CheckBox.Models;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,14 +12,19 @@ using Xamarin.Forms;
 
 namespace CheckBox.ViewModels
 {
-    public class NewAlbumViewModel : BaseViewModel
+    [QueryProperty(nameof(ItemId), nameof(ItemId))]
+    public class EditAlbumViewModel : BaseViewModel
     {
+        private int itemId;
         private string name;
         private string description;
         private int imageCount;
         private string folderName;
+        private List<Images> originalImages;
 
-        public NewAlbumViewModel()
+        public ObservableCollection<Images> Images { get; set; }
+
+        public EditAlbumViewModel()
         {
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
@@ -29,6 +35,44 @@ namespace CheckBox.ViewModels
                 (_, __) => SaveCommand.ChangeCanExecute();
 
             Images = new ObservableCollection<Images>();
+            originalImages = new List<Images>();
+        }
+
+        public int ItemId
+        {
+            get
+            {
+                return itemId;
+            }
+            set
+            {
+                itemId = value;
+                LoadItemId(value);
+            }
+        }
+
+        public async void LoadItemId(int itemId)
+        {
+            try
+            {
+                var album = await CheckBoxService.GetAlbumAsync(itemId);
+                originalImages = await CheckBoxService.GetImages(itemId);
+
+                foreach (var image in originalImages)
+                {
+                    image.ImagePath = CheckBoxService.GetImageFullPath(album.FolderName, image.ImageName);
+                    imageCount++;
+                    Images.Add(image);
+                }
+
+                folderName = album.FolderName;
+                Name = album.Title;
+                Description = album.Description;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Failed to Load Item");
+            }
         }
 
         public string PhotoPath { get; set; }
@@ -39,8 +83,6 @@ namespace CheckBox.ViewModels
                 && !string.IsNullOrWhiteSpace(description)
                 && imageCount > 0 && imageCount <= 5;
         }
-
-        public ObservableCollection<Images> Images { get; set; }
 
         public int ImageCount
         {
@@ -55,12 +97,6 @@ namespace CheckBox.ViewModels
         }
 
         public string Description
-        {
-            get => description;
-            set => SetProperty(ref description, value);
-        }
-
-        public string ImageValidation
         {
             get => description;
             set => SetProperty(ref description, value);
@@ -121,7 +157,6 @@ namespace CheckBox.ViewModels
                     return;
                 }
 
-                folderName ??= DateTime.UtcNow.ToString(AppConstants.AlbumFolderFormat);
                 var fileName = string.Concat(Guid.NewGuid().ToString().Replace("-", ""), $".jpg");
 
                 var file = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
@@ -159,7 +194,6 @@ namespace CheckBox.ViewModels
             Images.Remove(image);
             ImageCount--;
         }
-
 
         private async void OnCancel()
         {

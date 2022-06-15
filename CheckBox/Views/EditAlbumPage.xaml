@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CheckBox.Views.NewAlbumPage"
+             x:Class="CheckBox.Views.EditAlbumPage"
              xmlns:viewmodels="clr-namespace:CheckBox.ViewModels" 
              xmlns:model="clr-namespace:CheckBox.Models"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
@@ -20,15 +20,15 @@
             <ScrollView Grid.Row="0">
                 <StackLayout>
                     <Label Text="Text" FontSize="Medium" />
-                    <Entry Text="{Binding Name}" FontSize="Medium" />
+                    <Entry Text="{Binding Name, Mode=TwoWay}" FontSize="Medium" />
                     <Label Text="Description" FontSize="Medium" />
-                    <Editor Text="{Binding Description}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
+                    <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
                     <StackLayout Orientation="Horizontal">
                         <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-                        <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+                        <Button Text="Update" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
                     </StackLayout>
 
-                    <FlexLayout x:DataType="viewmodels:NewAlbumViewModel"   
+                    <FlexLayout x:DataType="viewmodels:EditAlbumViewModel"   
                             BindableLayout.ItemsSource="{Binding Images}"
                             Wrap="Wrap">
                         <BindableLayout.ItemTemplate>
@@ -39,13 +39,14 @@
                                     <AbsoluteLayout VerticalOptions="FillAndExpand"
                                                 AbsoluteLayout.LayoutBounds="0,1,1,1"
                                                 AbsoluteLayout.LayoutFlags="All">
-                                        <ff:CachedImage Source="{Binding ImagePath}"
+                                        <ff:CachedImage 
+                                           Source="{Binding ImagePath}"
                                            Aspect="AspectFill"
                                            AbsoluteLayout.LayoutBounds="0,1,1,1"
                                            AbsoluteLayout.LayoutFlags="All" />
                                         
                                         <Button 
-                                                Command="{Binding RemoveCommand, Source={RelativeSource AncestorType={x:Type viewmodels:NewAlbumViewModel}}}"
+                                                Command="{Binding RemoveCommand, Source={RelativeSource AncestorType={x:Type viewmodels:EditAlbumViewModel}}}"
                                                 CommandParameter="{Binding}"
                                                 Text="X"
                                                 AbsoluteLayout.LayoutBounds="0.9,0.1,0.2,0.2"

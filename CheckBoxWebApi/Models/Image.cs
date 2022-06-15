@@ -12,7 +12,7 @@ namespace CheckBoxWebApi.Models
         [ForeignKey(nameof(Album))]
         public int AlbumId { get; set; }
 
-        [MaxLength(24)]
+        [MaxLength(40)]
         public string ImageName { get; set; }
     }
 }

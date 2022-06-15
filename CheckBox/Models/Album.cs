@@ -20,7 +20,7 @@ namespace CheckBox.Models
 
         public DateTime? EditTime { get; set; }
 
-        public List<string> CheckPath { get; set; }
+        public List<Images> Images { get; set; }
 
         public string ThumbnailFullPath => AppConstants.UserDirectory + $"{FolderName}/{ThumbnailName}";
     }

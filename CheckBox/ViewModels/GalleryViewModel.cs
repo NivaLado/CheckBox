@@ -20,6 +20,8 @@ namespace CheckBox.ViewModels
 
         public Command RemoveCommand { get; }
 
+        public Command OpenGalleryCommand { get; }
+
         // TODO: Change logout place
         public Command LogoutCommand { get; }
 
@@ -31,6 +33,7 @@ namespace CheckBox.ViewModels
             AddCommand = new Command(ExecuteAddCommand);
             LogoutCommand = new Command(ExecuteLogoutCommand);
             RemoveCommand = new Command<int>(OnRemove);
+            OpenGalleryCommand = new Command<Album>(OnItemSelected);
         }
 
         private async void OnRemove(int albumId)
@@ -105,8 +108,7 @@ namespace CheckBox.ViewModels
             if (item == null)
                 return;
 
-            // This will push the ItemDetailPage onto the navigation stack
-            // await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            await Shell.Current.GoToAsync($"{nameof(EditAlbumPage)}?{nameof(EditAlbumViewModel.ItemId)}={item.Id}");
         }
     }
 }

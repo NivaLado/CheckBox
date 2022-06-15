@@ -1,5 +1,4 @@
-﻿using CheckBox.Constants;
-using CheckBox.ViewModels;
+﻿using CheckBox.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

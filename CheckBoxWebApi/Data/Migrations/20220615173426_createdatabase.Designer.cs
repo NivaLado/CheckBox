@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckBoxWebApi.Data.Migrations
 {
     [DbContext(typeof(CheckBoxDbContext))]
-    [Migration("20220615132618_createdatabase")]
+    [Migration("20220615173426_createdatabase")]
     partial class createdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,8 +124,8 @@ namespace CheckBoxWebApi.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageName")
-                        .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("Id");
 

@@ -122,8 +122,8 @@ namespace CheckBoxWebApi.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageName")
-                        .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("Id");
 

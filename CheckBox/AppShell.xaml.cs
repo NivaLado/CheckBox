@@ -13,6 +13,7 @@ namespace CheckBox
             Routing.RegisterRoute(nameof(RegistrationPage), typeof(RegistrationPage));
             Routing.RegisterRoute(nameof(GalleryPage), typeof(GalleryPage));
             Routing.RegisterRoute(nameof(NewAlbumPage), typeof(NewAlbumPage));
+            Routing.RegisterRoute(nameof(EditAlbumPage), typeof(EditAlbumPage));
         }
     }
 }

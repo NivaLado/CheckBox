@@ -1,12 +1,5 @@
 ﻿using CheckBox.Views;
-using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
-using Xamarin.Auth;
 using Xamarin.Forms;
-using CheckBox.Models;
-using CheckBox.Constants;
-using Google.Apis.Auth;
 using CheckBox.Enums;
 
 namespace CheckBox.ViewModels

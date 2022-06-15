@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace CheckBox.Constants
+﻿namespace CheckBox.Constants
 {
-	public class AppConstants
+    public class AppConstants
 	{
 		public static string UploadsFolder = "Uploads";
 		public static string AppName = "CheckBoxDevelopment";

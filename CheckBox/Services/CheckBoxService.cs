@@ -101,13 +101,13 @@ namespace CheckBox.Services
             using (var content = new MultipartFormDataContent())
             {
                 List<FileStream> fileStream = new List<FileStream>();
-                foreach(var check in album.CheckPath)
+                foreach(var image in album.Images)
                 {
-                    fileStream.Add(new FileStream(check, FileMode.Open));
+                    fileStream.Add(new FileStream(image.ImagePath, FileMode.Open));
                     var streamContent = new StreamContent(fileStream.Last());
                     streamContent.Headers.Add("Content-Type", "application/octet-stream");
-                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + Path.GetFileName(check) + "\"");
-                    content.Add(streamContent, "files", Path.GetFileName(check));
+                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + Path.GetFileName(image.ImagePath) + "\"");
+                    content.Add(streamContent, "files", Path.GetFileName(image.ImagePath));
                 }
 
                 var albumDto = new AlbumDto() 
@@ -116,8 +116,7 @@ namespace CheckBox.Services
                     Description = album.Description,
                     FolderName = album.FolderName,
                     UserId = AppConstants.UserId,
-                    CreationTime = DateTime.UtcNow,
-                    ThumbnailName = Path.GetFileName(album.CheckPath.First()) // Todo: Make more elegant thumnail picking
+                    ThumbnailName = Path.GetFileName(album.Images.First().ImagePath) // Todo: Make more elegant thumnail picking
                 };
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(albumDto));
@@ -135,9 +134,52 @@ namespace CheckBox.Services
             return await Task.FromResult(true);
         }
 
-        public Task<Album> GetAlbumAsync(int albumId)
+        public async Task<bool> UpdateAlbumAsync(Album album)
         {
-            throw new NotImplementedException();
+            using (var content = new MultipartFormDataContent())
+            {
+                List<FileStream> fileStream = new List<FileStream>();
+                foreach (var image in album.Images)
+                {
+                    fileStream.Add(new FileStream(image.ImagePath, FileMode.Open));
+                    var streamContent = new StreamContent(fileStream.Last());
+                    streamContent.Headers.Add("Content-Type", "application/octet-stream");
+                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + Path.GetFileName(image.ImagePath) + "\"");
+                    content.Add(streamContent, "files", Path.GetFileName(image.ImagePath));
+                }
+
+                var albumDto = new AlbumDto()
+                {
+                    Title = album.Title,
+                    Description = album.Description,
+                    FolderName = album.FolderName,
+                    UserId = AppConstants.UserId,
+                    ThumbnailName = Path.GetFileName(album.Images.First().ImagePath) // Todo: Make more elegant thumnail picking
+                };
+
+                var stringContent = new StringContent(JsonConvert.SerializeObject(albumDto));
+                stringContent.Headers.Add("Content-Disposition", "form-data; name=\"json\"");
+                content.Add(stringContent, "json");
+
+                var response = await httpClient.PutAsync(RouteConstants.UpdateAlbum, content);
+
+                foreach (var steam in fileStream)
+                {
+                    steam.Dispose();
+                }
+            }
+
+            return await Task.FromResult(true);
+        }
+
+        public async Task<Album> GetAlbumAsync(int albumId)
+        {
+            var url = string.Format(RouteConstants.GetAlbum, albumId);
+            var response = await httpClient.GetAsync(url);
+            var responseMessage = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<Album>(responseMessage);
+
+            return result;
         }
 
         public async Task<List<Album>> GetAlbumsAsync(int userId)
@@ -150,14 +192,25 @@ namespace CheckBox.Services
             return result;
         }
 
-        public Task<bool> DeleteAlbumAsync(int albumId)
+        public async Task DeleteAlbumAsync(int albumId)
         {
-            throw new NotImplementedException();
+            var url = string.Format(RouteConstants.DeleteAlbum, albumId);
+            await httpClient.DeleteAsync(url);
         }
 
-        public Task<bool> UpdateItemAsync(Album item)
+        public async Task<List<Images>> GetImages(int albumId)
         {
-            throw new NotImplementedException();
+            var url = string.Format(RouteConstants.GetImages, albumId);
+            var response = await httpClient.GetAsync(url);
+            var responseMessage = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<List<Images>>(responseMessage);
+
+            return result;
+        }
+
+        public string GetImageFullPath(string folderName, string imageName)
+        {
+            return AppConstants.UserDirectory + $"{folderName}/{imageName}";
         }
     }
 }

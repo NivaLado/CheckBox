@@ -1,5 +1,4 @@
-﻿using CheckBox.Models;
-using CheckBox.Services;
+﻿using CheckBox.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

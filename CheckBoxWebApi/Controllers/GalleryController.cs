@@ -10,22 +10,22 @@ namespace CheckBoxWebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class GalleryController : Controller
-    { 
+    {
         private readonly CheckBoxDbContext _context;
         private readonly ILogger<GalleryController> _logger;
 
-        public GalleryController(CheckBoxDbContext context, ILogger<GalleryController> logger) 
+        public GalleryController(CheckBoxDbContext context, ILogger<GalleryController> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("{albumId}")]
         [ProducesResponseType(typeof(Album), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAlbum(int id)
+        public async Task<IActionResult> GetAlbum(int albumId)
         {
-            var album = await _context.Albums.FindAsync(id);
+            var album = await _context.Albums.FindAsync(albumId);
             return album == null ? NotFound() : Ok(album);
         }
 
@@ -46,13 +46,16 @@ namespace CheckBoxWebApi.Controllers
                         Description = albumDto.Description,
                         ThumbnailName = albumDto.ThumbnailName,
                         FolderName = albumDto.FolderName,
-                        CreationTime = albumDto.CreationTime
+                        CreationTime = DateTime.UtcNow
                     };
+
                     var result = await _context.Albums.AddAsync(album);
                     await _context.SaveChangesAsync();
+                    List<string> imageNames = new();
+
                     foreach (var file in httpRequest.Form.Files)
                     {
-                        var directory = Path.Combine("C:", "Uploads", album.UserId.ToString(), album.FolderName);
+                        var directory = Path.Combine(WebApiConstants.UploadsDisc, WebApiConstants.UploadsFolder, album.UserId.ToString(), album.FolderName);
 
                         if (!Directory.Exists(directory))
                             Directory.CreateDirectory(directory);
@@ -60,11 +63,13 @@ namespace CheckBoxWebApi.Controllers
                         using var memoryStream = new MemoryStream();
                         await file.CopyToAsync(memoryStream); 
                         System.IO.File.WriteAllBytes(Path.Combine(directory, file.FileName), memoryStream.ToArray());
-
+                        imageNames.Add(file.FileName);
                     }
 
+                    await AddImages(imageNames, album.Id);
                     return Ok();
                 }
+
                 return new StatusCodeResult(500);
             }
             catch (Exception e)
@@ -80,29 +85,66 @@ namespace CheckBoxWebApi.Controllers
             var albumToDelete = _context.Albums.Find(albumId);
             if (albumToDelete != null)
             {
+                await DeleteImagesByAlbum(albumToDelete);
                 _context.Albums.Remove(albumToDelete);
                 await _context.SaveChangesAsync();
                 return Ok();
             }
+
             return NotFound();
         }
 
         [HttpPut()]
-        public async Task<IActionResult> UpdateAlbum(AlbumDto albumDto)
+        public async Task<IActionResult> UpdateAlbum()
         {
-            var albumToUpdate = _context.Albums.Where(s => s.Id == albumDto.Id).FirstOrDefault();
-
-            if (albumToUpdate != null)
+            try
             {
-                albumToUpdate.Title = albumDto.Title ?? albumToUpdate.Title;
-                albumToUpdate.Description = albumDto.Description ?? albumToUpdate.Description;
-                albumToUpdate.EditTime = DateTime.UtcNow;
+                var httpRequest = HttpContext.Request;
+                var albumDto = JsonConvert.DeserializeObject<AlbumDto>(HttpContext.Request.Form["json"]);
 
-                await _context.SaveChangesAsync();
-                return Ok();
+                var albumToUpdate = _context.Albums.Where(s => s.Id == albumDto.Id).FirstOrDefault();
+
+                if (albumToUpdate != null)
+                {
+                    albumToUpdate.Title = albumDto.Title ?? albumToUpdate.Title;
+                    albumToUpdate.Description = albumDto.Description ?? albumToUpdate.Description;
+                    albumToUpdate.ThumbnailName = albumDto.ThumbnailName ?? albumToUpdate.ThumbnailName;
+                    albumToUpdate.EditTime = DateTime.UtcNow;
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                if (httpRequest.Form.Files.Count > 0 && albumDto != null)
+                {
+                    List<string> imageNames = new();
+
+                    foreach (var file in httpRequest.Form.Files)
+                    {
+                        var directory = Path.Combine(WebApiConstants.UploadsDisc, WebApiConstants.UploadsFolder, albumToUpdate.UserId.ToString(), albumToUpdate.FolderName);
+
+                        if (!Directory.Exists(directory))
+                            Directory.CreateDirectory(directory);
+
+                        using var memoryStream = new MemoryStream();
+                        await file.CopyToAsync(memoryStream);
+                        System.IO.File.WriteAllBytes(Path.Combine(directory, file.FileName), memoryStream.ToArray());
+                        imageNames.Add(file.FileName);
+                    }
+
+                    await AddImages(imageNames, albumToUpdate.Id);
+                    return Ok();
+                }
+
+                return new StatusCodeResult(500);
             }
-
-            return NotFound();
+            catch (Exception e)
+            {
+                _logger.LogCritical(e, "Gallery Post controller");
+                return new StatusCodeResult(500);
+            }
         }
 
 
@@ -113,7 +155,7 @@ namespace CheckBoxWebApi.Controllers
             return await query.ToListAsync();
         }
 
-        [HttpPost("images/{albumId}")]
+        [HttpPost("addImages/{albumId}")]
         public async Task AddImages(IEnumerable<string> fileNameList,[FromRoute] int albumId)
         {
             List<Image> images = new();
@@ -130,7 +172,7 @@ namespace CheckBoxWebApi.Controllers
             }
         }
 
-        [HttpGet("images")]
+        [HttpGet("images/{albumId}")]
         public async Task<IEnumerable<Image>> GetImages(int albumId)
         {
             var query = _context.Images.Where(i => i.AlbumId == albumId);
@@ -140,7 +182,6 @@ namespace CheckBoxWebApi.Controllers
         [HttpDelete("images")]
         public async Task<IActionResult> DeleteImages(IEnumerable<string> fileNameList, int userId, string folderName)
         {
-            List<string> imageNames = new();
             var directory = Path.Combine(WebApiConstants.UploadsDisc, WebApiConstants.UploadsFolder, userId.ToString(), folderName);
 
             if (!Directory.Exists(directory))
@@ -156,15 +197,39 @@ namespace CheckBoxWebApi.Controllers
                 {
                     System.IO.File.Delete(imagePath);
                 }
-
-                imageNames.Add(fileName);
             }
 
-            if (imageNames.Any())
+            if (fileNameList.Any())
             {
-                var imagesToDelete = _context.Images.Where(i => imageNames.Contains(i.ImageName)).ToList();
+                var imagesToDelete = _context.Images.Where(i => fileNameList.Contains(i.ImageName)).ToList();
                 _context.Images.RemoveRange(imagesToDelete);
                 await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpDelete("deleteImagesByAlbum")]
+        public async Task<IActionResult> DeleteImagesByAlbum(Album album)
+        {
+            var images = await GetImages(album.Id);
+            if (images.Any())
+            {
+                var directory = Path.Combine(WebApiConstants.UploadsDisc, WebApiConstants.UploadsFolder, album.UserId.ToString(), album.FolderName);
+
+                if (Directory.Exists(directory))
+                {
+                    Directory.Delete(directory, true);
+                }
+
+                var fileNameList = images.Select(i => i.ImageName).ToList();
+
+                if (fileNameList.Any())
+                {
+                    var imagesToDelete = _context.Images.Where(i => fileNameList.Contains(i.ImageName)).ToList();
+                    _context.Images.RemoveRange(imagesToDelete);
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return Ok();

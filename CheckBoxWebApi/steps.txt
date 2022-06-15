@@ -3,6 +3,7 @@
 // LAPTOP-NMS2B956
 // Install SSEI 2019
 // Install SSMS 18
+// w3wp.exe
 
 // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?tabs=aspnetcore2x&view=aspnetcore-6.0
 

@@ -6,12 +6,11 @@ using Xamarin.Auth;
 using Xamarin.Forms;
 using CheckBox.Models;
 using CheckBox.Constants;
-using Google.Apis.Auth;
 using CheckBox.Enums;
 
 namespace CheckBox.ViewModels
 {
-	public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel
 	{
 		private bool showUserNotExistNotification;
 
@@ -141,14 +140,14 @@ namespace CheckBox.ViewModels
 
 				if (user != null)
 				{
-					int id = 1; //await CheckBoxService.RegisterOrGetUserForGoogle(
-					//	user.Email, 
-					//	(ushort)AuthorizationMethod.Google,
-					//	user.Id,
-					//	user.GivenName,
-					//	user.FamilyName);
+					int id = await CheckBoxService.RegisterOrGetUserForGoogle(
+                        user.Email,
+                        (ushort)AuthorizationMethod.Google,
+                        user.Id,
+                        user.GivenName,
+                        user.FamilyName);
 
-					if (id > 0)
+                    if (id > 0)
                     {
 						await LocalStorageService.Login(id, (ushort)AuthorizationMethod.Google);
 						await Shell.Current.GoToAsync($"//{nameof(GalleryPage)}");
