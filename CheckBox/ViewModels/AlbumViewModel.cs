@@ -3,10 +3,8 @@ using CheckBox.Models;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -43,7 +41,7 @@ namespace CheckBox.ViewModels
 
         public int ImageCount
         {
-            get => ImageCount;
+            get => imageCount;
             set => SetProperty(ref imageCount, value);
         }
 
