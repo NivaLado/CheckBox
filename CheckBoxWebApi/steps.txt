@@ -1,9 +1,11 @@
 ﻿
-// WIN-SMBMFOH18RL\\SQLEXPRESS
-// LAPTOP-NMS2B956
+// Remote database: WIN-SMBMFOH18RL\\SQLEXPRESS
+// Local  database: LAPTOP-NMS2B956
 // Install SSEI 2019
 // Install SSMS 18
-// w3wp.exe
+// Create Uploads and Logs folders under C: drive
+// w3wp.exe: IIS managed process
+
 
 // https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?tabs=aspnetcore2x&view=aspnetcore-6.0
 

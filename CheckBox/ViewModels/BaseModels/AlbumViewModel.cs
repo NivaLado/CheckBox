@@ -4,6 +4,7 @@ using Plugin.Media;
 using Plugin.Media.Abstractions;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -68,6 +69,22 @@ namespace CheckBox.ViewModels
             Images = new ObservableCollection<Images>();
         }
 
+        private async void OnSave()
+        {
+            Album newAlbum = new Album()
+            {
+                FolderName = FolderName,
+                Title = Name,
+                Description = Description,
+                Images = Images.ToList(),
+                CreationTime = DateTime.UtcNow
+            };
+
+            await CheckBoxService.AddAlbumAsync(newAlbum);
+
+            await Shell.Current.GoToAsync("..");
+        }
+
         private async Task PickFromGallery()
         {
             try
@@ -129,7 +146,7 @@ namespace CheckBox.ViewModels
             }
         }
 
-        private void OnRemove(Images image)
+        public virtual void OnRemove(Images image)
         {
             Images.Remove(image);
             ImageCount--;
@@ -141,27 +158,11 @@ namespace CheckBox.ViewModels
             await Shell.Current.GoToAsync("..");
         }
 
-        private async void OnSave()
-        {
-            Album newAlbum = new Album()
-            {
-                FolderName = FolderName,
-                Title = Name,
-                Description = Description,
-                Images = Images.ToList(),
-                CreationTime = DateTime.UtcNow
-            };
-
-            await CheckBoxService.AddAlbumAsync(newAlbum);
-
-            await Shell.Current.GoToAsync("..");
-        }
-
         private void AddFile(MediaFile file)
         {
             if (file != null)
             {
-                Images.Add(new Images() { ImagePath = file?.Path });
+                Images.Add(new Images() { ImagePath = file.Path, ImageName = Path.GetFileName(file.Path) });
                 ImageCount++;
             }
         }

@@ -79,22 +79,7 @@ namespace CheckBoxWebApi.Controllers
             }
         }
 
-        [HttpDelete()]
-        public async Task<IActionResult> DeleteAlbum(int albumId)
-        {
-            var albumToDelete = _context.Albums.Find(albumId);
-            if (albumToDelete != null)
-            {
-                await DeleteImagesByAlbum(albumToDelete);
-                _context.Albums.Remove(albumToDelete);
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-
-            return NotFound();
-        }
-
-        [HttpPut()]
+        [HttpPut]
         public async Task<IActionResult> UpdateAlbum()
         {
             try
@@ -135,16 +120,32 @@ namespace CheckBoxWebApi.Controllers
                     }
 
                     await AddImages(imageNames, albumToUpdate.Id);
-                    return Ok();
                 }
 
-                return new StatusCodeResult(500);
+                await DeleteImages(albumDto.ImagesToRemove, albumDto.UserId, albumDto.FolderName);
+
+                return Ok();
             }
             catch (Exception e)
             {
-                _logger.LogCritical(e, "Gallery Post controller");
+                _logger.LogCritical(e, "Gallery Put controller");
                 return new StatusCodeResult(500);
             }
+        }
+
+        [HttpDelete("{albumId}")]
+        public async Task<IActionResult> DeleteAlbum(int albumId)
+        {
+            var albumToDelete = _context.Albums.Find(albumId);
+            if (albumToDelete != null)
+            {
+                await DeleteImagesByAlbum(albumToDelete);
+                _context.Albums.Remove(albumToDelete);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return NotFound();
         }
 
 

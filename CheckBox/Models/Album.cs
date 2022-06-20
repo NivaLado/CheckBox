@@ -22,6 +22,8 @@ namespace CheckBox.Models
 
         public List<Images> Images { get; set; }
 
+        public List<string> ImagesToRemove { get; set; }
+
         public string ThumbnailFullPath => AppConstants.UserDirectory + $"{FolderName}/{ThumbnailName}";
     }
 }

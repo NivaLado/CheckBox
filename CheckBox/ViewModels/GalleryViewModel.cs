@@ -32,13 +32,14 @@ namespace CheckBox.ViewModels
             LoadItemsCommand = new Command(ExecuteLoadItemsCommand);
             AddCommand = new Command(ExecuteAddCommand);
             LogoutCommand = new Command(ExecuteLogoutCommand);
-            RemoveCommand = new Command<int>(OnRemove);
+            RemoveCommand = new Command<Album>(OnRemove);
             OpenGalleryCommand = new Command<Album>(OnItemSelected);
         }
 
-        private async void OnRemove(int albumId)
+        private async void OnRemove(Album album)
         {
-            // call service to remove album.
+            await CheckBoxService.DeleteAlbumAsync(album.Id);
+            Albums.Remove(album);
         }
 
         private async void ExecuteLogoutCommand()

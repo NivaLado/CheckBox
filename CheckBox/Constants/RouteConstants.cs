@@ -2,7 +2,11 @@
 {
     public static class RouteConstants
     {
-        public const string DomainName = "http://10.0.2.2:90"; // "http://5.101.122.153";
+        private const string Localhost = "http://10.0.2.2:52236";
+        private const string LocalIIS = "http://10.0.2.2:90";
+        private const string Production = "http://5.101.122.153";
+
+        public const string DomainName = Production;
         public const string RegisterUrl = "api/AppUser";
         public const string GoogleLogin = "api/AppUser/google";
         public const string Login = "api/AppUser/login";

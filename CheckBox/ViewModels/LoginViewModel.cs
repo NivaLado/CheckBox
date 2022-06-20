@@ -154,6 +154,7 @@ namespace CheckBox.ViewModels
                     }
 					else
                     {
+						// TODO: show different error
 						ShowThatUserExist(true);
 					}
 				}

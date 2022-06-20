@@ -39,7 +39,7 @@ namespace CheckBox.Services
                 return id;
             }
 
-            return 0;
+            return default;
         }
 
         public async Task<int> RegisterNewUser(
@@ -68,7 +68,7 @@ namespace CheckBox.Services
                 return id;
             }
 
-            return 0;
+            return default;
         }
 
         public async Task<int> RegisterOrGetUserForGoogle(string email, ushort authorizationMethod, string googleId, string name, string surname)
@@ -93,7 +93,7 @@ namespace CheckBox.Services
                 return id;
             }
 
-            return 0;
+            return default;
         }
 
         public async Task<bool> AddAlbumAsync(Album album)
@@ -106,8 +106,8 @@ namespace CheckBox.Services
                     fileStream.Add(new FileStream(image.ImagePath, FileMode.Open));
                     var streamContent = new StreamContent(fileStream.Last());
                     streamContent.Headers.Add("Content-Type", "application/octet-stream");
-                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + Path.GetFileName(image.ImagePath) + "\"");
-                    content.Add(streamContent, "files", Path.GetFileName(image.ImagePath));
+                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + image.ImageName + "\"");
+                    content.Add(streamContent, "files", image.ImageName);
                 }
 
                 var albumDto = new AlbumDto() 
@@ -116,7 +116,7 @@ namespace CheckBox.Services
                     Description = album.Description,
                     FolderName = album.FolderName,
                     UserId = AppConstants.UserId,
-                    ThumbnailName = Path.GetFileName(album.Images.First().ImagePath) // Todo: Make more elegant thumnail picking
+                    ThumbnailName = album.Images.First().ImageName // Todo: Make more elegant thumnail picking
                 };
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(albumDto));
@@ -144,17 +144,20 @@ namespace CheckBox.Services
                     fileStream.Add(new FileStream(image.ImagePath, FileMode.Open));
                     var streamContent = new StreamContent(fileStream.Last());
                     streamContent.Headers.Add("Content-Type", "application/octet-stream");
-                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + Path.GetFileName(image.ImagePath) + "\"");
-                    content.Add(streamContent, "files", Path.GetFileName(image.ImagePath));
+                    streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + image.ImageName + "\"");
+                    content.Add(streamContent, "files", image.ImageName);
                 }
 
                 var albumDto = new AlbumDto()
                 {
+                    Id = album.Id,
+                    UserId = AppConstants.UserId,
                     Title = album.Title,
                     Description = album.Description,
                     FolderName = album.FolderName,
-                    UserId = AppConstants.UserId,
-                    ThumbnailName = Path.GetFileName(album.Images.First().ImagePath) // Todo: Make more elegant thumnail picking
+                    ImagesToRemove = album.ImagesToRemove,
+                    ThumbnailName = album.ThumbnailName
+                    // Todo: Make more elegant thumnail picking
                 };
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(albumDto));

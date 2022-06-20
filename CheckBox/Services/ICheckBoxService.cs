@@ -14,6 +14,8 @@ namespace CheckBox.Services
 
         Task<bool> AddAlbumAsync(Album item);
 
+        Task<bool> UpdateAlbumAsync(Album album);
+
         Task DeleteAlbumAsync(int albumId);
 
         Task<Album> GetAlbumAsync(int albumId);

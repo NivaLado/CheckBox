@@ -25,7 +25,7 @@
                     <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
                     <StackLayout Orientation="Horizontal">
                         <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-                        <Button Text="Update" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+                        <Button Text="Update" Command="{Binding UpdateCommand}" HorizontalOptions="FillAndExpand"></Button>
                     </StackLayout>
 
                     <FlexLayout x:DataType="viewmodels:EditAlbumViewModel"   
@@ -49,6 +49,7 @@
                                                 Command="{Binding RemoveCommand, Source={RelativeSource AncestorType={x:Type viewmodels:EditAlbumViewModel}}}"
                                                 CommandParameter="{Binding}"
                                                 Text="X"
+                                                BorderRadius="50" 
                                                 AbsoluteLayout.LayoutBounds="0.9,0.1,0.2,0.2"
                                                 AbsoluteLayout.LayoutFlags="All"/>
                                     </AbsoluteLayout>

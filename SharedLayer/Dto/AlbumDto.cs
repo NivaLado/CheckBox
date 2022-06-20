@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SharedLayer.Dto
 {
@@ -15,6 +16,8 @@ namespace SharedLayer.Dto
         public string ThumbnailName { get; set; }
 
         public string FolderName { get; set; }
+
+        public List<string> ImagesToRemove { get; set; }
 
         public DateTime CreationTime { get; set; }
     }
