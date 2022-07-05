@@ -6,7 +6,7 @@
         private const string LocalIIS = "http://10.0.2.2:90";
         private const string Production = "http://5.101.122.153";
 
-        public const string DomainName = LocalIIS;
+        public const string DomainName = Localhost;
         public const string RegisterUrl = "api/AppUser";
         public const string GoogleLogin = "api/AppUser/google";
         public const string Login = "api/AppUser/login";

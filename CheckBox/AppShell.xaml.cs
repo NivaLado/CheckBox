@@ -14,6 +14,7 @@ namespace CheckBox
             Routing.RegisterRoute(nameof(GalleryPage), typeof(GalleryPage));
             Routing.RegisterRoute(nameof(NewAlbumPage), typeof(NewAlbumPage));
             Routing.RegisterRoute(nameof(EditAlbumPage), typeof(EditAlbumPage));
+            Routing.RegisterRoute(nameof(ImagePopupPage), typeof(ImagePopupPage));
         }
     }
 }

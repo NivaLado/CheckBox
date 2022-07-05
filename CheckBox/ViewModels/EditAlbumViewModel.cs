@@ -1,8 +1,10 @@
 ﻿using CheckBox.Models;
+using CheckBox.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
+using Xamarin.CommunityToolkit.Extensions;
 
 namespace CheckBox.ViewModels
 {
@@ -16,11 +18,14 @@ namespace CheckBox.ViewModels
 
         public Command UpdateCommand { get; set; }
 
+        public Command OpenImageCommand { get; set; }
+
         public EditAlbumViewModel() : base()
         {
             originalImages = new List<Images>();
             imagesToRemove = new List<string>();
             UpdateCommand = new Command(OnUpdate);
+            OpenImageCommand = new Command<Images >(OnImageSelected);
         }
 
         public int ItemId
@@ -95,6 +100,12 @@ namespace CheckBox.ViewModels
             {
                 Console.WriteLine("Failed to Load Item");
             }
+        }
+
+        async void OnImageSelected(Images item)
+        {
+            if (item == null)
+                return;
         }
     }
 }
