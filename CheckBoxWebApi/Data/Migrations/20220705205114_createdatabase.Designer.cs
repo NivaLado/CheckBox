@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CheckBoxWebApi.Data.Migrations
 {
     [DbContext(typeof(CheckBoxDbContext))]
-    [Migration("20220615173426_createdatabase")]
+    [Migration("20220705205114_createdatabase")]
     partial class createdatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
